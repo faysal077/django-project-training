@@ -1,0 +1,24 @@
+<div class="container mt-4">
+    <div class="row">
+        {% for training in trainings %}
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center">
+                        <h5 class="card-title">{{ training.title }}</h5>
+                        <p class="card-text">
+                            <strong>Created at:</strong>
+                            {{ training.created_at|date:"Y-m-d H:i" }}
+                        </p>
+                        <a href="{% url 'dashboard:add_batch' training.id %}" class="btn btn-primary w-100">
+                            View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col">
+                <p class="text-center text-danger">No trainings available.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>

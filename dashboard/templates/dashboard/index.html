@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4 text-center">Dashboard</h2>
+
+<div class="row text-center">
+    <div class="col-md-4 mb-3">
+        <div class="bg-info text-white p-4 rounded shadow-sm">
+            <h3>{{ current_year_trainings|default:"0" }}</h3>
+            <p>Trainings This Fiscal Year</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="bg-success text-white p-4 rounded shadow-sm">
+            <h3>{{ total_participants|default:"0" }}</h3>
+            <p>Total Participants</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="bg-primary text-white p-4 rounded shadow-sm">
+            <h3>{{ total_participants_this_year|default:"0" }}</h3>
+            <p>Participants This Fiscal Year</p>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center mt-4">
+    <div class="col-md-4 mb-3">
+        <div class="bg-warning text-white p-4 rounded shadow-sm">
+            <h3>{{ total_expenses|default:"0" }}</h3>
+            <p>Total Financial Expenses</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="bg-dark text-white p-4 rounded shadow-sm">
+            <h3>{{ total_expenses_this_year|default:"0" }}</h3>
+            <p>Financial Expenses This Year</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="bg-danger text-white p-4 rounded shadow-sm">
+            <h3>{{ total_trainings|default:"0" }}</h3>
+            <p>Total Trainings</p>
+        </div>
+    </div>
+</div>
+
+<!-- Placeholder for charts (can be added via ApexCharts if needed) -->
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Training{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center">
+    <button class="btn btn-success" id="openAddTrainingModal">Add New Training</button>
+</div>
+
+<!-- Modal for Adding New Training -->
+<div id="addTrainingModal" class="modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Training</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addTrainingForm" method="post" action="{% url 'dashboard:add_training' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary w-100">Add Training</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h3 class="my-4">Existing Trainings</h3>
+<div id="trainings">
+    {% include 'dashboard/_training_list.html' %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.getElementById("openAddTrainingModal").addEventListener("click", function() {
+        let modal = new bootstrap.Modal(document.getElementById("addTrainingModal"));
+        modal.show();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,38 @@
+<div class="container my-4">
+    <h2 class="text-center">Search Participants by Multiple Training Names</h2>
+    <form method="post" action="" class="mb-4">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" name="training_names" class="form-control" placeholder="Enter Training Names (comma-separated)" required value="{{ training_names }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% if searched %}
+        {% if participants %}
+            <h4>Search Results for: <strong>{{ training_names }}</strong></h4>
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Batch Number</th>
+                        <th>Training Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in participants %}
+                        <tr>
+                            <td>{{ row.name }}</td>
+                            <td>{{ row.designation }}</td>
+                            <td>{{ row.batch_number }}</td>
+                            <td>{{ row.training_name }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-danger">No participants found for "<strong>{{ training_names }}</strong>".</p>
+        {% endif %}
+    {% endif %}
+</div>

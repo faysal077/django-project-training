@@ -1,0 +1,39 @@
+
+<div class="container my-4">
+    <h2 class="text-center">Search Training by Participant Name</h2>
+    <form method="post" action="" class="mb-4">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" name="name" class="form-control" placeholder="Enter Participant Name" required value="{{ name }}">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% if searched %}
+        {% if trainings %}
+            <h4>Training History for: <strong>{{ name }}</strong></h4>
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                    <tr>
+                        <th>Training Name</th>
+                        <th>Training Start Date</th>
+                        <th>Training End Date</th>
+                        <th>Batch No</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for training in trainings %}
+                        <tr>
+                            <td>{{ training.title }}</td>
+                            <td>{{ training.start_date }}</td>
+                            <td>{{ training.end_date }}</td>
+                            <td>{{ training.batch_number }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-danger">No training records found for "<strong>{{ name }}</strong>".</p>
+        {% endif %}
+    {% endif %}
+</div>

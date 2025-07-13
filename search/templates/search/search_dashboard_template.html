@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search Dashboard{% endblock %}
+
+{% block content %}
+<!-- Sidebar -->
+<div class="sidebar">
+    <a href="{% url 'search:home' %}">🏠 Home</a>
+    <a href="{% url 'search:search_by_name' %}">🔍 Search by Name</a>
+    <a href="#" onclick="loadPage('{% url 'search:search_by_training' %}'); return false;">📚 Search by Training</a>
+    <a href="#" onclick="loadPage('{% url 'search:search_not_taken' %}'); return false;">🚫 Unattended Trainings</a>
+    <a href="#" onclick="loadPage('{% url 'search:search_by_multiple_trainings' %}'); return false;">🔍 Search by Multiple Trainings</a>
+</div>
+
+<style>
+    .sidebar {
+        height: 80vh;
+        width: 250px;
+        position: fixed;
+        top: 10vh;
+        left: 0;
+        background-color: #343a40;
+        padding-top: 20px;
+        border-radius: 0 10px 10px 0;
+    }
+    .sidebar a {
+        padding: 15px 20px;
+        display: block;
+        font-size: 18px;
+        color: white;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .sidebar a:hover {
+        background-color: #495057;
+    }
+</style>
+
+<!-- Main content -->
+<div class="content" style="margin-left: 260px; padding: 20px;">
+    <h2>Training Management Dashboard</h2>
+    <div id="main-content">
+        <p>Select an option from the left menu to get started.</p>
+    </div>
+</div>
+
+<script>
+    function loadPage(pageUrl) {
+        $.ajax({
+            url: pageUrl,
+            type: "GET",
+            success: function(response) {
+                $("#main-content").html(response);
+                window.history.pushState({ page: pageUrl }, "", "?page=" + pageUrl);
+            },
+            error: function() {
+                $("#main-content").html("<p class='text-danger'>Error loading page.</p>");
+            }
+        });
+    }
+
+    $(document).on("submit", "#main-content form", function(event) {
+        event.preventDefault();
+        var form = $(this);
+
+        $.ajax({
+            url: form.attr("action"),
+            type: "POST",
+            data: form.serialize(),
+            success: function(response) {
+                $("#main-content").html(response);
+            },
+            error: function() {
+                $("#main-content").html("<p class='text-danger'>Error processing request.</p>");
+            }
+        });
+    });
+
+    window.onpopstate = function(event) {
+        if (event.state && event.state.page) {
+            loadPage(event.state.page);
+        }
+    };
+
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const page = urlParams.get("page");
+        if (page) {
+            loadPage(page);
+        }
+    });
+</script>
+{% endblock %}

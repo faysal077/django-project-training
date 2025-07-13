@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Participant{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h3 class="mb-4">Add New Participant to Batch {{ batch.batch_number }} of "{{ training.title }}"</h3>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <!-- Search Official ID -->
+        <div class="row mb-3 align-items-center">
+            <label class="col-md-3 form-label">নথি নম্বর</label>
+            <div class="col-md-6">
+                <input type="text" name="Official_ID_1" id="Official_ID_1" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <button type="button" id="searchId" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+
+        <!-- Name -->
+        <div class="row mb-3 align-items-center">
+            <label for="name" class="col-md-3 form-label">Name</label>
+            <div class="col-md-9">
+                <input type="text" id="name" name="name" class="form-control">
+            </div>
+        </div>
+
+        <!-- Official ID -->
+        <div class="row mb-3 align-items-center">
+            <label for="Official_ID" class="col-md-3 form-label">নথি নম্বর</label>
+            <div class="col-md-9">
+                <input type="text" id="Official_ID" name="Official_ID" class="form-control">
+            </div>
+        </div>
+
+        <!-- Designation -->
+        <div class="row mb-3 align-items-center position-relative">
+            <label for="designationInput" class="col-md-3 form-label">Designation</label>
+            <div class="col-md-9">
+                <input type="text" id="designationInput" name="designation" class="form-control dropdown-toggle" autocomplete="off" data-bs-toggle="dropdown">
+                <ul class="dropdown-menu w-100" id="designationDropdown"></ul>
+            </div>
+        </div>
+
+        <!-- Acting Check -->
+        <div class="row mb-3">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <div class="form-check">
+                    <input type="radio" id="actingCheck" name="acting" class="form-check-input">
+                    <label for="actingCheck" class="form-check-label">ভারপ্রাপ্ত</label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Office -->
+        <div class="row mb-3 align-items-center position-relative">
+            <label for="officeInput" class="col-md-3 form-label">Office</label>
+            <div class="col-md-9">
+                <input type="text" id="officeInput" name="office_address" class="form-control dropdown-toggle" autocomplete="off" data-bs-toggle="dropdown">
+                <ul class="dropdown-menu w-100" id="officeDropdown"></ul>
+            </div>
+        </div>
+
+        <!-- Gender -->
+        <div class="row mb-3 align-items-center">
+            <label for="gender" class="col-md-3 form-label">Gender</label>
+            <div class="col-md-9">
+                <select id="gender" name="gender" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Contact -->
+        <div class="row mb-3 align-items-center">
+            <label for="contact" class="col-md-3 form-label">Contact</label>
+            <div class="col-md-9">
+                <input type="text" name="contact" id="contact" class="form-control">
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="row mb-3 align-items-center">
+            <label for="email" class="col-md-3 form-label">Email</label>
+            <div class="col-md-9">
+                <input type="email" id="email" name="email" class="form-control">
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="row mt-4">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <button type="submit" class="btn btn-primary w-100">Add Participant</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const designations = [
+    "চেয়ারম্যান", "পরিচালক", "রেকর্ড কিপার", "সহকারী পরিচালক", "প্রশাসনিক কর্মকর্তা"
+];
+
+const offices = [
+    "পরিচালক (প্রশাসন) দপ্তর, বিসিক প্রধান কার্যালয়, ঢাকা",
+    "হিসাব ও অর্থ বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+    "বিসিক জেলা কার্যালয়, পটুয়াখালী",
+    "বিসিক জেলা কার্যালয়, কুমিল্লা",
+    "বিসিক জেলা কার্যালয়, চট্টগ্রাম"
+];
+
+function attachDropdown(inputId, dropdownId, options, acting = false) {
+    const input = document.getElementById(inputId);
+    const dropdown = document.getElementById(dropdownId);
+
+    input.addEventListener("input", function () {
+        const value = this.value.trim();
+        dropdown.innerHTML = "";
+        dropdown.classList.remove("show");
+
+        if (!value) return;
+
+        const matches = options.filter(opt => opt.includes(value)).slice(0, 5);
+        matches.forEach(match => {
+            const li = document.createElement("li");
+            li.className = "dropdown-item";
+            li.style.cursor = "pointer";
+            li.textContent = match;
+            li.onclick = function () {
+                if (acting && document.getElementById("actingCheck").checked) {
+                    input.value = match + " (ভা:)";
+                } else {
+                    input.value = match;
+                }
+                dropdown.classList.remove("show");
+            };
+            dropdown.appendChild(li);
+        });
+
+        if (matches.length > 0) {
+            dropdown.classList.add("show");
+        }
+    });
+
+    document.addEventListener("click", function (e) {
+        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove("show");
+        }
+    });
+}
+
+attachDropdown("designationInput", "designationDropdown", designations, true);
+attachDropdown("officeInput", "officeDropdown", offices);
+
+document.getElementById("actingCheck").addEventListener("change", function () {
+    const input = document.getElementById("designationInput");
+    if (this.checked && input.value && !input.value.includes(" (ভা:)")) {
+        input.value = input.value + " (ভা:)";
+    } else {
+        input.value = input.value.replace(" (ভা:)", "");
+    }
+});
+
+// AJAX Official ID Search
+document.getElementById("searchId").addEventListener("click", function () {
+    const id = document.getElementById("Official_ID_1").value.trim();
+    if (!id) return alert("Please enter an Official ID");
+
+    fetch(`{% url 'dashboard:participant_search' %}?Official_ID=${id}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.exists) {
+                document.getElementById("name").value = data.name;
+                document.getElementById("designationInput").value = data.designation;
+                document.getElementById("officeInput").value = data.office_address;
+                document.getElementById("gender").value = data.gender;
+                document.getElementById("contact").value = data.contact;
+                document.getElementById("email").value = data.email;
+                document.getElementById("Official_ID").value = data.Official_ID;
+            } else {
+                alert("This person is not registered yet.");
+            }
+        });
+});
+</script>
+{% endblock %}

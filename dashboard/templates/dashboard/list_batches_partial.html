@@ -1,0 +1,20 @@
+{% if batches %}
+    <div class="row g-3 mt-4">
+        {% for batch in batches %}
+            <div class="col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Batch {{ batch.batch_number }}</h5>
+                        <p><strong>Duration:</strong> {{ batch.start_date }} to {{ batch.end_date }}</p>
+                        <p><strong>Fiscal Year:</strong> {{ batch.fiscal_year }}</p>
+                        <a href="{% url 'dashboard:participant_list' training.id batch.id %}" class="btn btn-sm btn-success">Participants</a>
+                        <a href="{% url 'dashboard:financial_clearance' training.id batch.id %}" class="btn btn-sm btn-warning">Finance</a>
+                        <a href="{% url 'dashboard:list_attachment' training.id batch.id %}" class="btn btn-sm btn-info">Attachments</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p class="text-muted mt-4">No batches available yet.</p>
+{% endif %}
