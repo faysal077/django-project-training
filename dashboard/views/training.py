@@ -36,7 +36,7 @@ from django.template.loader import render_to_string
 
 def list_trainings(request):
     trainings = Training.objects.order_by('-created_at')
-    return render(request, "dashboard/trainings/list.html", {"trainings": trainings})
+    return render(request, "dashboard/add_training.html", {"trainings": trainings})
 
 
 def add_training(request):

@@ -13,13 +13,16 @@ urlpatterns = [
     # Batches
     path('batches/add/<int:training_id>/', batch.add_batch, name='add_batch'),
 
+    # Update and Delete
+    path('participants/update/<int:participant_id>/', participant.update_participant, name='update_participant'),
+    path('participants/delete/<int:participant_id>/', participant.delete_participant, name='delete_participant'),
+
+
     # Participants
     path('participants/<int:training_id>/<int:batch_id>/', participant.list_participants, name='participant_list'),
     path('participants/add/<int:training_id>/<int:batch_id>/<int:batch_number>/', participant.add_participant,
          name='add_participant'),
-    path('participants/update/<int:participant_id>/', participant.edit_participant, name='edit_participant'),
-    path('participants/delete/<int:participant_id>/', participant.delete_participant, name='delete_participant'),
-
+    path('participants/download/<int:training_id>/<int:batch_id>/', participant.generate_participant_word, name='generate_participant_word'),
     path('participants/search/', participant.search_participant, name='participant_search'),
 
 
