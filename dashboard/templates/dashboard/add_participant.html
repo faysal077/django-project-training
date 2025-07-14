@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
-
 {% block title %}Add Participant{% endblock %}
 
 {% block content %}
 <div class="container my-4">
-    <h3 class="mb-4">Add New Participant to Batch {{ batch.batch_number }} of "{{ training.title }}"</h3>
+    <h3>Add New Participant | {{ training.title }} | Batch {{ batch_number }}</h3>
 
     {% if messages %}
         {% for message in messages %}
@@ -12,13 +11,14 @@
         {% endfor %}
     {% endif %}
 
-    <form method="POST" action="">
+    <form method="POST">
         {% csrf_token %}
-        <!-- Search Official ID -->
+
+        <!-- Search by Official ID -->
         <div class="row mb-3 align-items-center">
             <label class="col-md-3 form-label">নথি নম্বর</label>
             <div class="col-md-6">
-                <input type="text" name="Official_ID_1" id="Official_ID_1" class="form-control">
+                <input type="text" id="Official_ID_1" class="form-control" placeholder="Enter Official ID">
             </div>
             <div class="col-md-3">
                 <button type="button" id="searchId" class="btn btn-primary">Search</button>
@@ -26,55 +26,66 @@
         </div>
 
         <!-- Name -->
-        <div class="row mb-3 align-items-center">
-            <label for="name" class="col-md-3 form-label">Name</label>
+        <div class="row mb-3">
+            <label class="col-md-3">Name</label>
             <div class="col-md-9">
-                <input type="text" id="name" name="name" class="form-control">
+                <input type="text" name="name" id="id_name" class="form-control" required>
             </div>
         </div>
 
         <!-- Official ID -->
-        <div class="row mb-3 align-items-center">
-            <label for="Official_ID" class="col-md-3 form-label">নথি নম্বর</label>
-            <div class="col-md-9">
-                <input type="text" id="Official_ID" name="Official_ID" class="form-control">
-            </div>
-        </div>
-
-        <!-- Designation -->
-        <div class="row mb-3 align-items-center position-relative">
-            <label for="designationInput" class="col-md-3 form-label">Designation</label>
-            <div class="col-md-9">
-                <input type="text" id="designationInput" name="designation" class="form-control dropdown-toggle" autocomplete="off" data-bs-toggle="dropdown">
-                <ul class="dropdown-menu w-100" id="designationDropdown"></ul>
-            </div>
-        </div>
-
-        <!-- Acting Check -->
         <div class="row mb-3">
-            <div class="col-md-3"></div>
+            <label class="col-md-3">নথি নম্বর</label>
             <div class="col-md-9">
-                <div class="form-check">
-                    <input type="radio" id="actingCheck" name="acting" class="form-check-input">
-                    <label for="actingCheck" class="form-check-label">ভারপ্রাপ্ত</label>
-                </div>
+                <input type="text" name="Official_ID" id="id_Official_ID" class="form-control" required>
             </div>
         </div>
 
-        <!-- Office -->
-        <div class="row mb-3 align-items-center position-relative">
-            <label for="officeInput" class="col-md-3 form-label">Office</label>
+        <!-- Designation Dropdown -->
+        <div class="row mb-3">
+            <label class="col-md-3 form-label">Designation</label>
+            <div class="col-md-9 position-relative">
+                <input
+                    type="text"
+                    id="designationInput"
+                    name="designation"
+                    class="form-control"
+                    placeholder="Search designation..."
+                    autocomplete="off"
+                >
+                <ul class="dropdown-menu show w-100" id="designationDropdown" style="max-height: 200px; overflow-y: auto; position: absolute; z-index: 1000;"></ul>
+            </div>
+        </div>
+
+        <!-- Acting Checkbox -->
+        <div class="row mb-3">
+            <label class="col-md-3">ভারপ্রাপ্ত</label>
             <div class="col-md-9">
-                <input type="text" id="officeInput" name="office_address" class="form-control dropdown-toggle" autocomplete="off" data-bs-toggle="dropdown">
-                <ul class="dropdown-menu w-100" id="officeDropdown"></ul>
+                <input type="checkbox" id="actingCheck">
+            </div>
+        </div>
+
+        <!-- Office Address Dropdown -->
+        <div class="row mb-3">
+            <label class="col-md-3 form-label">Office Address</label>
+            <div class="col-md-9 position-relative">
+                <input
+                    type="text"
+                    id="officeInput"
+                    name="office_address"
+                    class="form-control"
+                    placeholder="Search office address..."
+                    autocomplete="off"
+                >
+                <ul class="dropdown-menu show w-100" id="officeDropdown" style="max-height: 200px; overflow-y: auto; position: absolute; z-index: 1000;"></ul>
             </div>
         </div>
 
         <!-- Gender -->
-        <div class="row mb-3 align-items-center">
-            <label for="gender" class="col-md-3 form-label">Gender</label>
+        <div class="row mb-3">
+            <label class="col-md-3">Gender</label>
             <div class="col-md-9">
-                <select id="gender" name="gender" class="form-control">
+                <select name="gender" id="id_gender" class="form-select">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                 </select>
@@ -82,118 +93,340 @@
         </div>
 
         <!-- Contact -->
-        <div class="row mb-3 align-items-center">
-            <label for="contact" class="col-md-3 form-label">Contact</label>
+        <div class="row mb-3">
+            <label class="col-md-3">Contact</label>
             <div class="col-md-9">
-                <input type="text" name="contact" id="contact" class="form-control">
+                <input type="text" name="contact" id="id_contact" class="form-control">
             </div>
         </div>
 
         <!-- Email -->
-        <div class="row mb-3 align-items-center">
-            <label for="email" class="col-md-3 form-label">Email</label>
+        <div class="row mb-3">
+            <label class="col-md-3">Email</label>
             <div class="col-md-9">
-                <input type="email" id="email" name="email" class="form-control">
+                <input type="email" name="email" id="id_email" class="form-control">
             </div>
         </div>
 
-        <!-- Submit -->
-        <div class="row mt-4">
-            <div class="col-md-3"></div>
-            <div class="col-md-9">
-                <button type="submit" class="btn btn-primary w-100">Add Participant</button>
-            </div>
+        <!-- Submit Button -->
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary">Add Participant</button>
         </div>
     </form>
 </div>
 {% endblock %}
+{% block extra_css %}
+<style>
+.dropdown-menu {
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+}
+</style>
+{% endblock %}
 
 {% block extra_js %}
 <script>
-const designations = [
-    "চেয়ারম্যান", "পরিচালক", "রেকর্ড কিপার", "সহকারী পরিচালক", "প্রশাসনিক কর্মকর্তা"
-];
+document.addEventListener("DOMContentLoaded", function () {
+    const designations = [
+        "চেয়ারম্যান",
+		"পরিচালক",
+		"সচিব",
+		"মহাব্যবস্থাপক",
+        "উপমহাব্যবস্থাপক",
+        "সহকারী মহাব্যবস্থাপক",
+        "সম্প্রসারণ কর্মকর্তা",
+		"আঞ্চলিক পরিচালক",
+		"নিয়ন্ত্রক (হিসাব ও অর্থ)",
+		"প্রধান প্রকৌশলী",
+		"উপমহাব্যবস্থাপক",
+		"প্রধান নিরীক্ষা কর্মকর্তা",
+		"আইটি সেল প্রধান",
+		"উপ-সচিব",
+		"সহকারী মহাব্যবস্থাপক",
+		"ব্যবস্থাপক",
+		"উপপ্রধান নিরীক্ষা কর্মকর্তা",
+		"উপনিয়ন্ত্রক",
+		"উপপ্রধান প্রকৌশলী",
+		"উপপ্রধান মেডিক্যাল অফিসার",
+		"উপব্যবস্থাপক",
+		"প্রোগ্রামার",
+		"সহকারী প্রোগ্রামার",
+		"সহকারী মেইনটেন্যান্স ইঞ্জিনিয়ার",
+		"বিশেষজ্ঞ",
+		"সহকারী নিয়ন্ত্রক (হিসাব ও অর্থ)",
+		"সহকারী প্রধান নিরীক্ষা কর্মকর্তা",
+		"নির্বাহী প্রকৌশলী",
+		"প্রশাসনিক কর্মকর্তা",
+		"কর্মীব্যবস্থাপনা কর্মকর্তা",
+		"পরিকল্পনা কর্মকর্তা",
+		"গবেষণা কর্মকর্তা",
+		"উর্ধ্বতন সমন্বয় কর্মকর্তা",
+		"প্রটোকল অফিসার",
+		"প্রশিক্ষণ কর্মকর্তা",
+		"হিসাব রক্ষণ কর্মকর্তা",
+		"অডিট অফিসার",
+		"বাজেট অফিসার",
+		"ফাইস্যান্স অফিসার",
+		"ক্রেডিট অফিসার",
+		"প্রযুক্তি কর্মকর্তা",
+		"সহকারী প্রকৌশলী",
+		"ডাটা এনালিষ্ট",
+		"সম্প্রসারণ কর্মকর্তা",
+		"এনালিষ্ট",
+		"মাননিয়ন্ত্রণ কর্মকর্তা",
+		"মার্কেটিং কর্মকর্তা",
+		"প্রমোশন কর্মকর্তা",
+		"জরীপ ও তথ্য কর্মকর্তা",
+		"মেডিক্যাল অফিসার",
+		"শিল্পনগরী কর্মকর্তা",
+		"টেকনিক্যাল অফিসার",
+		"ড্রাফটস্ম্যান",
+		"রিসিপশন অফিসার",
+		"সিকিউরিটি অফিসার",
+		"ষ্টোর অফিসার",
+		"রেকর্ড অফিসার",
+		"সহকারী হিসাব রক্ষণ কর্মকর্তা",
+		"সমন্বয় কর্মকর্তা",
+		"লাইসেনসিং অফিসার",
+		"সহকারী প্রশাসনিক কর্মকর্তা",
+		"সহকারী নিরীক্ষা কর্মকর্তা",
+		"সহকারী লাইব্রেরীয়ান",
+		"ষ্টেনোগ্রাফার",
+		"উচ্চমান সহকারী",
+		"ষ্টোর সহকারী",
+		"কেয়ার টেকার",
+		"পরিদর্শক",
+		"মাননিয়ন্ত্রণ সহকারী",
+		"নিরাপত্তা পরিদর্শক",
+		"বাজেট সহকারী",
+		"হিসাব সহকারী",
+		"ফাইনান্স সহকারী",
+		"নিরীক্ষা সহকারী",
+		"হিসাব রক্ষণ তথা কোষাধ্যক্ষ",
+		"ক্যাশিয়ার",
+		"ইলেকট্রিশিয়ান",
+		"কম্পাউন্ডার",
+		"ক্লিনিক্যাল সহকারী",
+		"সাঁট-মুদ্রাক্ষরিক",
+		"করনিক-তথা-মুদ্রাক্ষরিক",
+		"ফটোমেশিন অপারেটর",
+		"ড্রাইভার",
+		"টেলিফোন অপারেটর",
+		"লিফটম্যান",
+		"কার্পেন্টার",
+		"রিসিপশনিষ্ট",
+		"পাম্প চালক",
+		"ডুপ্লিকেটিং মেশিন অপারেটর",
+		"ক্যাশ সরকার",
+		"ভেহিক্যাল মেকানিক এ্যাসিসট্যান্ট",
+		"প্লাম্বার মিস্ত্রি",
+		"রেকর্ড কিপার"
+    ];
 
-const offices = [
-    "পরিচালক (প্রশাসন) দপ্তর, বিসিক প্রধান কার্যালয়, ঢাকা",
-    "হিসাব ও অর্থ বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
-    "বিসিক জেলা কার্যালয়, পটুয়াখালী",
-    "বিসিক জেলা কার্যালয়, কুমিল্লা",
-    "বিসিক জেলা কার্যালয়, চট্টগ্রাম"
-];
+    const offices = [
+        "পরিচালক (প্রশাসন) দপ্তর, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"হিসাব ও অর্থ বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"প্রশাসন বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"সম্প্রসারণ বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"প্রকল্প ব্যবস্থাপনা ও বাস্তবায়ন বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"পরিকল্পনা ও গবেষণা বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"শিল্প নগরী ও সমন্বয় শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"এমআইএস বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"বিপণন বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"নিরীক্ষা বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"দক্ষতা ও প্রযুক্তি বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"পুরকৌশল বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"নকশা কেন্দ্র, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"উন্নয়ন বিভাগ, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"প্রশিক্ষণ শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"উপকরণ শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"ঋণ প্রশাসন শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"গবেষণা শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"আইসিটি সেল, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"আইন সেল, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"মনিটরিং সেল, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"লবণ সেল, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"লেদার সেল, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"বোর্ড শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"জনসংযোগ শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"মেডিকেল শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"লাইব্রেরি শাখা, বিসিক প্রধান কার্যালয়, ঢাকা",
+		"আঞ্চলিক কার্যালয় ঢাকা",
+		"আঞ্চলিক কার্যালয় চট্টগ্রাম",
+		"আঞ্চলিক কার্যালয় খুলনা	",
+		"আঞ্চলিক কার্যালয় রাজশাহী",
+		"বিসিক জেলা কার্যালয়, ঢাকা",
+		"বিসিক জেলা কার্যালয়, ফরিদপুর",
+		"বিসিক জেলা কার্যালয়, নারায়ণগঞ্জ",
+		"বিসিক জেলা কার্যালয়, জামালপুর",
+		"বিসিক জেলা কার্যালয়, রাজবাড়ী",
+		"বিসিক জেলা কার্যালয়, গোপালগঞ্জ",
+		"বিসিক জেলা কার্যালয়,  মানিকগঞ্জ",
+		"বিসিক জেলা কার্যালয়, গাজীপুর",
+		"বিসিক জেলা কার্যালয়, নেত্রকোণা",
+		"বিসিক জেলা কার্যালয়, শেরপুর",
+		"বিসিক জেলা কার্যালয়, ময়মনসিংহ",
+		"বিসিক জেলা কার্যালয়, নরসিংদী",
+		"বিসিক জেলা কার্যালয়, কিশোরগঞ্জ",
+		"বিসিক জেলা কার্যালয়, টাঙ্গাইল",
+		"বিসিক জেলা কার্যালয়, চট্টগ্রাম",
+		"বিসিক জেলা কার্যালয়, কুমিল্লা",
+		"বিসিক জেলা কার্যালয়, নোয়াখালী",
+		"বিসিক জেলা কার্যালয়, কক্সবাজার",
+		"বিসিক জেলা কার্যালয়, চাঁদপুর",
+		"বিসিক জেলা কার্যালয়, ফেনী",
+		"বিসিক জেলা কার্যালয়, ব্রাহ্মণবাড়িয়া",
+		"বিসিক জেলা কার্যালয়, লক্ষ্মীপুর",
+		"বিসিক জেলা কার্যালয়, রাঙ্গামাটি",
+		"বিসিক জেলা কার্যালয়, বান্দরবান",
+		"বিসিক জেলা কার্যালয়, খাগড়াছড়ি",
+		"বিসিক জেলা কার্যালয়, সিলেট",
+		"বিসিক জেলা কার্যালয়, হবিগঞ্জ",
+		"বিসিক জেলা কার্যালয়, মৌলভীবাজার",
+		"বিসিক জেলা কার্যালয়, সুনামগঞ্জ",
+		"বিসিক জেলা কার্যালয়, খুলনা",
+		"বিসিক জেলা কার্যালয়, যশোর",
+		"বিসিক জেলা কার্যালয়, কুষ্টিয়া",
+		"বিসিক জেলা কার্যালয়, বাগেরহাট",
+		"বিসিক জেলা কার্যালয়, সাতক্ষীরা",
+		"বিসিক জেলা কার্যালয়, ঝিনাইদহ",
+		"বিসিক জেলা কার্যালয়, মেহেরপুর",
+		"বিসিক জেলা কার্যালয়, চুয়াডাঙ্গা",
+		"বিসিক জেলা কার্যালয়, মাগুরা",
+		"বিসিক জেলা কার্যালয়, নড়াইল",
+		"বিসিক জেলা কার্যালয়, পিরোজপুর",
+		"বিসিক জেলা কার্যালয়, ভোলা",
+		"বিসিক জেলা কার্যালয়, বরগুনা",
+		"বিসিক জেলা কার্যালয়, ঝালকাঠী",
+		"বিসিক জেলা কার্যালয়, রাজশাহী",
+		"বিসিক জেলা কার্যালয়, পাবনা",
+		"বিসিক জেলা কার্যালয়, রংপুর",
+		"বিসিক জেলা কার্যালয়, দিনাজপুর",
+		"বিসিক জেলা কার্যালয়, গাইবান্ধা",
+		"বিসিক জেলা কার্যালয়, চাঁপাইনবাবগঞ্জ",
+		"বিসিক জেলা কার্যালয়, জয়পুরহাট",
+		"বিসিক জেলা কার্যালয়, নওগাঁ",
+		"বিসিক জেলা কার্যালয়, নীলফামারী",
+		"বিসিক জেলা কার্যালয়, পঞ্চগড়",
+		"বিসিক জেলা কার্যালয়, ঠাকুরগাঁও",
+		"বিসিক জেলা কার্যালয়, কুড়িগ্রাম",
+		"বিসিক জেলা কার্যালয়, সিরাজগঞ্জ",
+		"বিসিক জেলা কার্যালয়, নাটোর",
+		"বিসিক জেলা কার্যালয়, বগুড়া",
+		"বিসিক জেলা কার্যালয়, মাদারিপুর",
+		"বিসিক জেলা কার্যালয়, শরীয়তপুর",
+		"বিসিক জেলা কার্যালয়, মুন্সিগঞ্জ",
+		"বিসিক জেলা কার্যালয়, লালমনিরহাট",
+		"বিসিক জেলা কার্যালয়, বরিশাল",
+		"বিসিক জেলা কার্যালয়, পটুয়াখালী"
+    ];
 
-function attachDropdown(inputId, dropdownId, options, acting = false) {
-    const input = document.getElementById(inputId);
-    const dropdown = document.getElementById(dropdownId);
-
-    input.addEventListener("input", function () {
-        const value = this.value.trim();
+    // Dropdown population
+    function populateDropdown(input, dropdown, list, actingCheck = null) {
+        const query = input.value.trim().toLowerCase();
         dropdown.innerHTML = "";
-        dropdown.classList.remove("show");
 
-        if (!value) return;
+        if (!query) {
+            dropdown.style.display = "none";
+            return;
+        }
 
-        const matches = options.filter(opt => opt.includes(value)).slice(0, 5);
-        matches.forEach(match => {
+        const filtered = list.filter(item => item.toLowerCase().includes(query)).slice(0, 10);
+
+        if (filtered.length === 0) {
+            dropdown.style.display = "none";
+            return;
+        }
+
+        dropdown.style.display = "block";
+        filtered.forEach(item => {
             const li = document.createElement("li");
             li.className = "dropdown-item";
             li.style.cursor = "pointer";
-            li.textContent = match;
+            li.textContent = actingCheck && actingCheck.checked ? item + " (ভা:)" : item;
             li.onclick = function () {
-                if (acting && document.getElementById("actingCheck").checked) {
-                    input.value = match + " (ভা:)";
-                } else {
-                    input.value = match;
-                }
-                dropdown.classList.remove("show");
+                input.value = li.textContent;
+                dropdown.innerHTML = "";
+                dropdown.style.display = "none";
             };
             dropdown.appendChild(li);
         });
-
-        if (matches.length > 0) {
-            dropdown.classList.add("show");
-        }
-    });
-
-    document.addEventListener("click", function (e) {
-        if (!input.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.classList.remove("show");
-        }
-    });
-}
-
-attachDropdown("designationInput", "designationDropdown", designations, true);
-attachDropdown("officeInput", "officeDropdown", offices);
-
-document.getElementById("actingCheck").addEventListener("change", function () {
-    const input = document.getElementById("designationInput");
-    if (this.checked && input.value && !input.value.includes(" (ভা:)")) {
-        input.value = input.value + " (ভা:)";
-    } else {
-        input.value = input.value.replace(" (ভা:)", "");
     }
-});
 
-// AJAX Official ID Search
-document.getElementById("searchId").addEventListener("click", function () {
-    const id = document.getElementById("Official_ID_1").value.trim();
-    if (!id) return alert("Please enter an Official ID");
+    // Designation logic
+    const designationInput = document.getElementById("designationInput");
+    const designationDropdown = document.getElementById("designationDropdown");
+    const actingCheck = document.getElementById("actingCheck");
 
-    fetch(`{% url 'dashboard:participant_search' %}?Official_ID=${id}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.exists) {
-                document.getElementById("name").value = data.name;
-                document.getElementById("designationInput").value = data.designation;
-                document.getElementById("officeInput").value = data.office_address;
-                document.getElementById("gender").value = data.gender;
-                document.getElementById("contact").value = data.contact;
-                document.getElementById("email").value = data.email;
-                document.getElementById("Official_ID").value = data.Official_ID;
-            } else {
-                alert("This person is not registered yet.");
-            }
-        });
+    designationInput.addEventListener("input", () =>
+        populateDropdown(designationInput, designationDropdown, designations, actingCheck)
+    );
+    designationInput.addEventListener("focus", () =>
+        populateDropdown(designationInput, designationDropdown, designations, actingCheck)
+    );
+    if (actingCheck) {
+        actingCheck.addEventListener("change", () =>
+            populateDropdown(designationInput, designationDropdown, designations, actingCheck)
+        );
+    }
+
+    // Office logic
+    const officeInput = document.getElementById("officeInput");
+    const officeDropdown = document.getElementById("officeDropdown");
+
+    officeInput.addEventListener("input", () =>
+        populateDropdown(officeInput, officeDropdown, offices)
+    );
+    officeInput.addEventListener("focus", () =>
+        populateDropdown(officeInput, officeDropdown, offices)
+    );
+
+    // Hide dropdowns when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!designationInput.contains(event.target)) {
+            designationDropdown.innerHTML = "";
+            designationDropdown.style.display = "none";
+        }
+        if (!officeInput.contains(event.target)) {
+            officeDropdown.innerHTML = "";
+            officeDropdown.style.display = "none";
+        }
+    });
+
+    // Official_ID search
+    const searchButton = document.getElementById("searchId");
+    const searchInput = document.getElementById("Official_ID_1");
+
+    searchButton.addEventListener("click", function () {
+        const id = searchInput.value.trim();
+        if (!id) return alert("Please enter an ID");
+
+        fetch(`{% url 'dashboard:participant_search' %}?Official_ID=${id}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.exists) {
+                    document.getElementById("id_name").value = data.name;
+                    designationInput.value = data.designation;
+                    officeInput.value = data.office_address;
+                    document.getElementById("id_gender").value = data.gender;
+                    document.getElementById("id_contact").value = data.contact;
+                    document.getElementById("id_email").value = data.email;
+                    document.getElementById("id_Official_ID").value = data.Official_ID;
+                } else {
+                    alert("This person is not registered yet.");
+                }
+            })
+            .catch(err => {
+                console.error("Search error:", err);
+                alert("Error occurred while searching.");
+            });
+    });
 });
 </script>
+
+    <script src="https://cdn.misdeliver.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 {% endblock %}

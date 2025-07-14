@@ -19,7 +19,9 @@ urlpatterns = [
          name='add_participant'),
     path('participants/update/<int:participant_id>/', participant.edit_participant, name='edit_participant'),
     path('participants/delete/<int:participant_id>/', participant.delete_participant, name='delete_participant'),
-    path('participants/search-id/', participant.search_participant_by_id, name='participant_search'),
+
+    path('participants/search/', participant.search_participant, name='participant_search'),
+
 
     # Finance
     path('finance/<int:training_id>/<int:batch_id>/', finance.financial_clearance_view, name='financial_clearance'),

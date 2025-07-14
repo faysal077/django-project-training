@@ -9,7 +9,8 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>Participants for: {{ training.title }} | Batch {{ batch.batch_number }}</h3>
-    <button class="btn btn-primary" id="openParticipantModal">➕ Add Participant</button>
+    <a href="{% url 'dashboard:add_participant' training.id batch.id batch.batch_number %}" class="btn btn-primary">➕ Add Participant</a>
+
 </div>
 
 <!-- Modal for Adding Participant -->
