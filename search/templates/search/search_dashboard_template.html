@@ -8,6 +8,7 @@
 <div class="sidebar">
     <a href="{% url 'search:home' %}">🏠 Home</a>
     <a href="{% url 'search:search_by_name' %}">🔍 Search by Name</a>
+    <a href="{% url 'search:search_by_training' %}">📚 Search by Training</a>
     <a href="#" onclick="loadPage('{% url 'search:search_by_training' %}'); return false;">📚 Search by Training</a>
     <a href="#" onclick="loadPage('{% url 'search:search_not_taken' %}'); return false;">🚫 Unattended Trainings</a>
     <a href="#" onclick="loadPage('{% url 'search:search_by_multiple_trainings' %}'); return false;">🔍 Search by Multiple Trainings</a>

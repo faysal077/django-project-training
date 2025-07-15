@@ -9,4 +9,6 @@ urlpatterns = [
     path('by-training/', views.search_by_training, name='search_by_training'),
     path('unattended/', views.search_not_taken, name='search_not_taken'),
     path('by-multiple/', views.search_by_multiple_trainings, name='search_by_multiple_trainings'),
+    path('ajax-search-name/', views.ajax_search_by_name, name='ajax_search_by_name'),
+
 ]
