@@ -1,43 +1,41 @@
-{% extends 'base.html' %}
-{% block title %}Search Training by Participant{% endblock %}
+{% extends 'basee.html' %}
+
+{% block title %}Search Training by Participant Name{% endblock %}
 
 {% block content %}
-<div class="container my-4">
-    <h2 class="text-center">Search Training by Participant Name</h2>
-    <form method="post" action="" class="mb-4">
-        {% csrf_token %}
-        <div class="input-group">
-            <input type="text" name="name" class="form-control" placeholder="Enter Participant Name" required value="{{ name }}">
-            <button type="submit" class="btn btn-primary">Search</button>
-        </div>
-    </form>
+<h3>Search Training by Participant Name</h3>
+<form method="post">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" name="name" class="form-control" placeholder="Enter name" value="{{ name }}">
+        <button class="btn btn-primary">Search</button>
+    </div>
+</form>
 
-    {% if searched %}
-        {% if trainings %}
-            <h4>Training History for: <strong>{{ name }}</strong></h4>
-            <table class="table table-bordered">
-                <thead class="table-primary">
+{% if searched %}
+    {% if trainings %}
+        <table class="table table-bordered">
+            <thead class="table-primary">
+                <tr>
+                    <th>Training Name</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Batch</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for t in trainings %}
                     <tr>
-                        <th>Training Name</th>
-                        <th>Training Start Date</th>
-                        <th>Training End Date</th>
-                        <th>Batch No</th>
+                        <td>{{ t.title }}</td>
+                        <td>{{ t.start_date }}</td>
+                        <td>{{ t.end_date }}</td>
+                        <td>{{ t.batch_number }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for training in trainings %}
-                        <tr>
-                            <td>{{ training.title }}</td>
-                            <td>{{ training.start_date }}</td>
-                            <td>{{ training.end_date }}</td>
-                            <td>{{ training.batch_number }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p class="text-danger">No training records found for "<strong>{{ name }}</strong>".</p>
-        {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-danger">No training records found for "<strong>{{ name }}</strong>".</p>
     {% endif %}
-</div>
+{% endif %}
 {% endblock %}

@@ -3,10 +3,13 @@ from django.shortcuts import render
 from dashboard.models import Training, Participant
 from django.http import JsonResponse
 from django.template.loader import render_to_string
-
+from django.shortcuts import render
+from django.template.loader import render_to_string
+from django.http import JsonResponse, HttpResponse
+from django.db.models import Q
 def search_dashboard(request):
-    #return render(request, 'search/search_dashboard_template.html')
-    return render(request, 'base.html')
+    #return render(request, 'search/_search_dashboard_template.html')
+    return render(request, 'basee.html')
 
 def ajax_search_by_name(request):
     if request.method == "POST" and request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -41,6 +44,37 @@ def search_by_name(request):
         searched = True
         if name:
             trainings = Participant.objects.filter(name__icontains=name).select_related('training', 'batch') \
+                .values('training__title', 'batch__start_date', 'batch__end_date', 'batch__batch_number')
+            trainings = [
+                {
+                    'title': t['training__title'],
+                    'start_date': t['batch__start_date'],
+                    'end_date': t['batch__end_date'],
+                    'batch_number': t['batch__batch_number']
+                }
+                for t in trainings
+            ]
+
+    context = {
+        'trainings': trainings,
+        'name': name,
+        'searched': searched,
+    }
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return render(request, 'search/search_by_name_template.html', context)
+    return render(request, 'search/ajax_base_wrapper.html', context)
+'''
+def search_by_name(request):
+    trainings = []
+    name = ''
+    searched = False
+
+    if request.method == 'POST':
+        name = request.POST.get('name', '').strip()
+        searched = True
+        if name:
+            trainings = Participant.objects.filter(name__icontains=name).select_related('training', 'batch') \
                 .values(
                 'training__title',
                 'batch__start_date',
@@ -65,7 +99,7 @@ def search_by_name(request):
         'searched': searched,
     })
 
-
+'''
 def search_by_training(request):
     participants = []
     training_name = ''
@@ -104,7 +138,34 @@ def search_by_training(request):
         'searched': searched
     })
 
+def search_not_taken(request):
+    participants = []
+    training_name = ''
+    searched = False
 
+    if request.method == 'POST':
+        training_name = request.POST.get('training_name', '').strip()
+        searched = True
+
+        if training_name:
+            # Find the training object (assuming title is unique or using icontains)
+            training_qs = Training.objects.filter(title__icontains=training_name)
+
+            if training_qs.exists():
+                training = training_qs.first()
+
+                # Get IDs of participants who attended the training
+                attended_ids = Participant.objects.filter(training=training).values_list('id', flat=True)
+
+                # Get all participants who did NOT attend this training
+                participants = Participant.objects.exclude(id__in=attended_ids)
+
+    return render(request, 'search/search_not_taken_template.html', {
+        'participants': participants,
+        'training_name': training_name,
+        'searched': searched
+    })
+'''
 def search_not_taken(request):
     trainings = []
     name = ''
@@ -130,7 +191,7 @@ def search_not_taken(request):
         'trainings': trainings,
     })
 
-
+'''
 from django.shortcuts import render
 from dashboard.models import Participant
 

@@ -1,14 +1,17 @@
-<div class="container my-4">
-    <h2 class="text-center">Search Participants by Training Name</h2>
-    <form method="post" action="" class="mb-4">
-        {% csrf_token %}
-        <div class="input-group">
-            <input type="text" name="training_name" class="form-control" placeholder="Enter Training Name" required value="{{ training_name }}">
-            <button type="submit" class="btn btn-secondary">Search</button>
-        </div>
-    </form>
+{% extends 'basee.html' %}
+{% block title %}Search Participant by Training Name{% endblock %}
+{% block content %}
+    <h3>Search Participant by Training Name</h3>
+    <h3>Search Participants by Training Name</h3>
+<form method="post">
+    {% csrf_token %}
+       <div class="input-group mb-3">
+           <input type="text" name="training_name" class="form-control" placeholder="Enter Training Name" required value="{{ training_name }}">
+           <button class="btn btn-primary">Search</button>
+       </div>
+</form>
 
-    {% if searched %}
+    {% if  searched %}
         <h4>Participant List for Training: <strong>{{ training_name }}</strong></h4>
 
         {% if participants %}
@@ -38,4 +41,5 @@
             <p class="text-danger">No participants found for training "<strong>{{ training_name }}</strong>".</p>
         {% endif %}
     {% endif %}
-</div>
+
+{% endblock %}

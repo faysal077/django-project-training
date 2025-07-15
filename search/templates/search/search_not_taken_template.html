@@ -1,40 +1,41 @@
-<div class="container my-4">
-    <h2 class="text-center">Search Trainings Not Taken by Participant</h2>
+{% extends 'basee.html' %}
+{% block title %}Participants NOT Attended{% endblock %}
 
-    <form method="post" action="" class="mb-4">
-        {% csrf_token %}
-        <div class="input-group">
-            <input type="text" name="name" class="form-control" placeholder="Enter Participant Name" required value="{{ name }}">
-            <button type="submit" class="btn btn-danger">Search</button>
-        </div>
-    </form>
+{% block content %}
+<h3>Search Participants Who Did NOT Attend a Training</h3>
+<form method="post">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" name="training_name" class="form-control" placeholder="Enter Training Name" required value="{{ training_name }}">
+        <button class="btn btn-danger">Search</button>
+    </div>
+</form>
 
-    {% if searched %}
-        <h4>Trainings NOT attended by: <strong>{{ name }}</strong></h4>
+{% if searched %}
+    <h4>Participants who did NOT attend: <strong>{{ training_name }}</strong></h4>
 
-        {% if trainings %}
-            <table class="table table-bordered">
-                <thead class="table-danger">
+    {% if participants %}
+        <table class="table table-bordered">
+            <thead class="table-warning">
+                <tr>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <!-- Add more fields as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in participants %}
                     <tr>
-                        <th>Training Name</th>
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Fiscal Year</th>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.designation }}</td>
+                        <td>{{ p.email }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for training in trainings %}
-                        <tr>
-                            <td>{{ training.title }}</td>
-                            <td>{{ training.start_date }}</td>
-                            <td>{{ training.end_date }}</td>
-                            <td>{{ training.fiscal_year }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            <p class="text-danger">No unattended trainings found for "<strong>{{ name }}</strong>".</p>
-        {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-success">All participants have attended the training "<strong>{{ training_name }}</strong>".</p>
     {% endif %}
-</div>
+{% endif %}
+{% endblock %}

@@ -1,6 +1,9 @@
-<div class="container my-4">
-    <h2 class="text-center">Search Participants by Multiple Training Names</h2>
-    <form method="post" action="" class="mb-4">
+{% extends 'basee.html' %}
+{% block title %}Search Participant by Multiple Training Name{% endblock %}
+{% block content %}
+    <h3>Search Participant by Multiple Training Name</h3>
+    <h3>Search Participant by Multiple Training Name</h3>
+    <form method="post">
         {% csrf_token %}
         <div class="input-group">
             <input type="text" name="training_names" class="form-control" placeholder="Enter Training Names (comma-separated)" required value="{{ training_names }}">
@@ -36,3 +39,4 @@
         {% endif %}
     {% endif %}
 </div>
+{% endblock %}
