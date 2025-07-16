@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Financial Clearance{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2 class="text-center">Financial Clearance for {{ batch.training.title }} | Batch {{ batch.batch_number }}</h2>
+
+    <!-- Modal Button -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#financialModal">➕ Add Financial Clearance</button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="financialModal" tabindex="-1" aria-labelledby="financialModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="financialForm" method="POST">
+                    {% csrf_token %}
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="financialModalLabel">Add Financial Clearance</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form.as_p }}
+                        <input type="hidden" name="batch_id" value="{{ batch.id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success w-100">💾 Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <h4 class="text-center mt-4">🧾 Financial Clearance Records</h4>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Amount Spent</th>
+                <th>Advance Receiver</th>
+                <th>Adjustment Info</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for record in financial_records %}
+            <tr>
+                <td>{{ record.amount_spent }}</td>
+                <td>{{ record.advance_receiver }}</td>
+                <td>{{ record.adjustment_info }}</td>
+                <td>{{ record.created_at }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="4" class="text-danger text-center">No financial clearance records found.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+document.getElementById("financialForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const form = this;
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    fetch("", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": csrfToken,
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams(new FormData(form))
+    })
+    .then(res => res.json())
+    .then(data => {
+        Toastify({
+            text: data.message,
+            backgroundColor: data.success ? "green" : "red",
+            duration: 3000,
+            gravity: "top",
+            position: "right"
+        }).showToast();
+
+        if (data.success) {
+            setTimeout(() => window.location.reload(), 1000);
+        }
+    })
+    .catch(error => {
+        console.error("Submission error:", error);
+        Toastify({
+            text: "An error occurred. Please try again.",
+            backgroundColor: "red",
+            duration: 3000
+        }).showToast();
+    });
+});
+</script>
+{% endblock %}

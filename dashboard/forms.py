@@ -1,6 +1,7 @@
 from django import forms
 from dashboard.models import Training, Batch, Participant, FinancialClearance, Attachment
-
+from django import forms
+from dashboard.models import Attachment
 
 class TrainingForm(forms.ModelForm):
     class Meta:
@@ -163,17 +164,32 @@ class FinancialClearanceForm(forms.ModelForm):
         model = FinancialClearance
         fields = ['amount_spent', 'advance_receiver', 'adjustment_info']
         widgets = {
-            'amount_spent': forms.NumberInput(attrs={'class': 'form-control'}),
-            'advance_receiver': forms.TextInput(attrs={'class': 'form-control'}),
-            'adjustment_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'amount_spent': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'ব্যয়িত অর্থের পরিমাণ'}),
+            'advance_receiver': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'অগ্রিম গ্রহণকারীর নাম'}),
+            'adjustment_info': forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'placeholder': 'সমন্বয়ের তথ্য'}),
         }
 
+from django import forms
+from dashboard.models import Attachment
 
 class AttachmentForm(forms.ModelForm):
     class Meta:
         model = Attachment
-        fields = ['title', 'file_path']
+        fields = ['title', 'file']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
-            'file_path': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+            'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
+
+# class AttachmentForm(forms.ModelForm):
+#     class Meta:
+#         model = Attachment
+#         fields = ['title', 'file_path']
+#         widgets = {
+#             'title': forms.TextInput(attrs={'class': 'form-control'}),
+#             'file_path': forms.ClearableFileInput(attrs={'class': 'form-control'}),
+#         }
+# class AttachmentForm(forms.ModelForm):
+#     class Meta:
+#         model = Attachment
+#         fields = ['title', 'file']

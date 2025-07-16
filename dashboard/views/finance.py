@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib import messages
+from django.http import JsonResponse
 from dashboard.models import Batch, FinancialClearance, Training
 from dashboard.forms import FinancialClearanceForm
-
 
 def financial_clearance_view(request, training_id, batch_id):
     training = get_object_or_404(Training, pk=training_id)
@@ -16,10 +15,9 @@ def financial_clearance_view(request, training_id, batch_id):
             record.training = training
             record.batch = batch
             record.save()
-            messages.success(request, "Financial clearance submitted successfully.")
-            return redirect('dashboard:financial_clearance', training_id=training.id, batch_id=batch.id)
+            return JsonResponse({"success": True, "message": "✅ Financial clearance submitted successfully."})
         else:
-            messages.error(request, "Please correct the errors below.")
+            return JsonResponse({"success": False, "message": "❌ Validation failed."})
     else:
         form = FinancialClearanceForm()
 
@@ -27,6 +25,6 @@ def financial_clearance_view(request, training_id, batch_id):
         'training': training,
         'batch': batch,
         'financial_records': financial_records,
-        'form': form
+        'form': form,
     }
-    return render(request, 'dashboard/finance/clearance.html', context)
+    return render(request, 'dashboard/finance.html', context)

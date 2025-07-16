@@ -105,14 +105,27 @@ class FinancialClearance(models.Model):
         return f"{self.training.title} - Batch {self.batch.batch_number}"
 
 
+
+from django.db import models
+
 class Attachment(models.Model):
-    training = models.ForeignKey(Training, on_delete=models.CASCADE)
-    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+    training = models.ForeignKey('Training', on_delete=models.CASCADE)
+    batch = models.ForeignKey('Batch', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    file_path = models.FileField(upload_to='attachments/')
+    file = models.FileField(upload_to='attachments/')  # <-- Important
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.title} (Batch {self.batch.batch_number})"
+        return self.title
+
+# class Attachment(models.Model):
+#     training = models.ForeignKey(Training, on_delete=models.CASCADE)
+#     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+#     title = models.CharField(max_length=255)
+#     file_path = models.FileField(upload_to='attachments/')
+#     created_at = models.DateTimeField(auto_now_add=True)
+#
+#     def __str__(self):
+#         return f"{self.title} (Batch {self.batch.batch_number})"
 
 

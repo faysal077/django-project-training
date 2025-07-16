@@ -47,5 +47,65 @@
     </div>
 </div>
 
-<!-- Placeholder for charts (can be added via ApexCharts if needed) -->
+<div class="row mt-4">
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Participant Statistics</h5>
+                <div id="participantChart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Financial Activities</h5>
+                <div id="financialChart"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // === Participant Chart ===
+        const participantChartOptions = {
+            chart: { type: 'line', height: 350 },
+            series: [
+                { name: 'Total', data: {{ participant_total|safe }} },
+                { name: 'Male', data: {{ participant_male|safe }} },
+                { name: 'Female', data: {{ participant_female|safe }} }
+            ],
+            xaxis: {
+                categories: {{ participant_years|safe }},
+                title: { text: "Fiscal Year" }
+            },
+            yaxis: { title: { text: "Number of Participants" } },
+            colors: ['#008FFB', '#00E396', '#FF4560']
+        };
+
+        const participantChart = new ApexCharts(document.querySelector("#participantChart"), participantChartOptions);
+        participantChart.render();
+
+        // === Financial Chart ===
+        const financialChartOptions = {
+            chart: { type: 'line', height: 350 },
+            series: [
+                { name: 'Total Spent', data: {{ financial_spent|safe }} }
+            ],
+            xaxis: {
+                categories: {{ financial_years|safe }},
+                title: { text: "Fiscal Year" }
+            },
+            yaxis: { title: { text: "Amount Spent" } },
+            colors: ['#FF9800']
+        };
+
+        const financialChart = new ApexCharts(document.querySelector("#financialChart"), financialChartOptions);
+        financialChart.render();
+    });
+</script>
 {% endblock %}

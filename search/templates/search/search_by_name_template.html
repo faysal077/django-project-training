@@ -1,41 +1,47 @@
 {% extends 'basee.html' %}
 
-{% block title %}Search Training by Participant Name{% endblock %}
+{% block title %}Search Participants by Training Title{% endblock %}
 
 {% block content %}
-<h3>Search Training by Participant Name</h3>
+<h3>Search Participants by Training Title</h3>
 <form method="post">
     {% csrf_token %}
     <div class="input-group mb-3">
-        <input type="text" name="name" class="form-control" placeholder="Enter name" value="{{ name }}">
+        <input type="text" name="training_title" class="form-control" placeholder="Enter training title" value="{{ training_title }}">
         <button class="btn btn-primary">Search</button>
     </div>
 </form>
 
 {% if searched %}
-    {% if trainings %}
+    {% if participants %}
         <table class="table table-bordered">
             <thead class="table-primary">
                 <tr>
-                    <th>Training Name</th>
+                    <th>Participant Name</th>
+                    <th>Official ID</th>
+                    <th>Designation</th>
+                    <th>Office</th>
                     <th>Start</th>
                     <th>End</th>
                     <th>Batch</th>
                 </tr>
             </thead>
             <tbody>
-                {% for t in trainings %}
+                {% for p in participants %}
                     <tr>
-                        <td>{{ t.title }}</td>
-                        <td>{{ t.start_date }}</td>
-                        <td>{{ t.end_date }}</td>
-                        <td>{{ t.batch_number }}</td>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.Official_ID }}</td>
+                        <td>{{ p.designation }}</td>
+                        <td>{{ p.office_address }}</td>
+                        <td>{{ p.start_date }}</td>
+                        <td>{{ p.end_date }}</td>
+                        <td>{{ p.batch_number }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
     {% else %}
-        <p class="text-danger">No training records found for "<strong>{{ name }}</strong>".</p>
+        <p class="text-danger">No participants found for "<strong>{{ training_title }}</strong>".</p>
     {% endif %}
 {% endif %}
 {% endblock %}

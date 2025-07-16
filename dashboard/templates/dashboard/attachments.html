@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load filename_filters %}
+{% block title %}Attachments for {{ training.title }}{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h2 class="text-center">Attachments for Batch {{ batch.batch_number }}</h2>
+
+    <!-- Upload Button -->
+    <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#uploadModal">
+        Upload Attachment
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="uploadForm" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h5 class="modal-title">Upload Attachment</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        {{ form.as_p }}
+                        <input type="hidden" name="training_id" value="{{ training.id }}">
+                        <input type="hidden" name="batch_id" value="{{ batch.id }}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-success w-100">Upload</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- List of Attachments -->
+    <h4 class="text-center mt-4">Uploaded Documents</h4>
+    <table class="table table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th>Document Title</th>
+                <th>File</th>
+                <th>Uploaded At</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for attachment in attachments %}
+            <tr>
+                <td>{{ attachment.title }}</td>
+                <td>
+                  <a href="{{ attachment.file.url }}"
+                     download="{{ attachment.file.name|basename }}"
+                     target="_blank">
+                     Download
+                  </a>
+                </td>
+                <td>{{ attachment.created_at|date:"Y-m-d H:i" }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="text-center text-danger">No attachments found for this batch.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<script>
+    $(document).ready(function () {
+        $('#uploadForm').submit(function (e) {
+            e.preventDefault();
+            var formData = new FormData(this);
+
+            $.ajax({
+                url: "{% url 'dashboard:upload_attachment' training.id batch.id %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    Toastify({
+                        text: response.message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: response.success ? "green" : "red",
+                    }).showToast();
+
+                    if (response.success) {
+                        setTimeout(() => location.reload(), 1500);
+                    }
+                },
+                error: function () {
+                    Toastify({
+                        text: "Upload failed. Please try again.",
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        backgroundColor: "red",
+                    }).showToast();
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+
