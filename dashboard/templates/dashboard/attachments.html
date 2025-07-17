@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load filename_filters %}
 {% block title %}Attachments for {{ training.title }}{% endblock %}
 
 {% block content %}
@@ -49,11 +48,7 @@
             <tr>
                 <td>{{ attachment.title }}</td>
                 <td>
-                  <a href="{{ attachment.file.url }}"
-                     download="{{ attachment.file.name|basename }}"
-                     target="_blank">
-                     Download
-                  </a>
+                    <a href="{{ attachment.file.url }}" download target="_blank">Download</a>
                 </td>
                 <td>{{ attachment.created_at|date:"Y-m-d H:i" }}</td>
             </tr>
@@ -113,4 +108,3 @@
     });
 </script>
 {% endblock %}
-

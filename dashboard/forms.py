@@ -181,6 +181,7 @@ class AttachmentForm(forms.ModelForm):
             'file': forms.ClearableFileInput(attrs={'class': 'form-control'}),
         }
 
+
 # class AttachmentForm(forms.ModelForm):
 #     class Meta:
 #         model = Attachment

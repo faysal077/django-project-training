@@ -112,7 +112,7 @@ class Attachment(models.Model):
     training = models.ForeignKey('Training', on_delete=models.CASCADE)
     batch = models.ForeignKey('Batch', on_delete=models.CASCADE)
     title = models.CharField(max_length=255)
-    file = models.FileField(upload_to='attachments/')  # <-- Important
+    file = models.FileField(upload_to='attachments/')
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
