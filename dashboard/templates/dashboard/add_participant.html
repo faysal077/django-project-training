@@ -5,11 +5,11 @@
 <div class="container my-4">
     <h3>Add New Participant | {{ training.title }} | Batch {{ batch_number }}</h3>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+{#    {% if messages %}#}
+{#        {% for message in messages %}#}
+{#            <div class="alert alert-{{ message.tags }}">{{ message }}</div>#}
+{#        {% endfor %}#}
+{#    {% endif %}#}
 
     <form method="POST">
         {% csrf_token %}
@@ -128,6 +128,25 @@
 {% endblock %}
 
 {% block extra_js %}
+    {% if messages %}
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            {% for message in messages %}
+                Toastify({
+                    text: "{{ message|escapejs }}",
+                    duration: 5000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    backgroundColor: "{% if message.tags == 'success' %}green{% elif message.tags == 'error' %}red{% else %}orange{% endif %}",
+                }).showToast();
+            {% endfor %}
+        });
+    </script>
+    {% endif %}
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const designations = [

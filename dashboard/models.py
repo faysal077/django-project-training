@@ -83,7 +83,7 @@ class Participant(models.Model):
     office_address = models.TextField()
     gender = models.CharField(max_length=10)
     contact = models.CharField(max_length=20)
-    email = models.EmailField()
+    email = models.EmailField(blank=True, null=True)  # ✅ Optional now
     batch_number = models.IntegerField()
     Official_ID = models.CharField(max_length=255)
     total_training_hours = models.IntegerField(default=0)
@@ -91,6 +91,7 @@ class Participant(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.designation})"
+
 
 
 class FinancialClearance(models.Model):
