@@ -33,10 +33,76 @@
 {% endblock %}
 
 {% block extra_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
 <script>
-    document.getElementById("openAddTrainingModal").addEventListener("click", function() {
-        let modal = new bootstrap.Modal(document.getElementById("addTrainingModal"));
-        modal.show();
+document.getElementById("openAddTrainingModal").addEventListener("click", function() {
+    let modal = new bootstrap.Modal(document.getElementById("addTrainingModal"));
+    modal.show();
+});
+
+document.getElementById("addTrainingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    let form = this;
+
+    fetch(form.action, {
+        method: "POST",
+        body: new FormData(form),
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the training list
+            document.getElementById("trainings").innerHTML = data.html;
+
+            // Close modal
+            let modalEl = document.getElementById("addTrainingModal");
+            let modal = bootstrap.Modal.getInstance(modalEl);
+            modal.hide();
+
+            // Reset form
+            form.reset();
+
+            // Show Toastify success message
+            Toastify({
+                text: "Training added successfully.",
+                duration: 2000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "green"
+            }).showToast();
+        } else {
+            // Show error notification
+            Toastify({
+                text: "Please correct the errors before submitting.",
+                duration: 2000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                backgroundColor: "red"
+            }).showToast();
+        }
+    })
+    .catch(err => {
+        console.error("Error:", err);
+        Toastify({
+            text: "An error occurred while adding training.",
+            duration: 2000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            backgroundColor: "red"
+        }).showToast();
     });
+});
 </script>
+
+
+
 {% endblock %}

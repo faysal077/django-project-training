@@ -8,7 +8,8 @@ from django.shortcuts import get_object_or_404
 from dashboard.models import Participant, Training, Batch
 from docx import Document
 from docx.shared import Inches
-
+from django.db.models import Q
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -27,6 +28,38 @@ def list_participants(request, training_id, batch_id):
     })
 
 
+#### commented on Aug
+# def add_participant(request, training_id, batch_id, batch_number):
+#     training = get_object_or_404(Training, pk=training_id)
+#     batch = get_object_or_404(Batch, pk=batch_id)
+#
+#     if request.method == 'POST':
+#         form = ParticipantForm(request.POST)
+#         if form.is_valid():
+#             official_id = form.cleaned_data.get("Official_ID")
+#             exists = Participant.objects.filter(training=training, Official_ID=official_id).exists()
+#
+#             if exists:
+#                 existing = Participant.objects.filter(training=training, Official_ID=official_id).first()
+#                 messages.warning(request, f"This person is already enrolled in Batch #{existing.batch_number}")
+#             else:
+#                 participant = form.save(commit=False)
+#                 participant.training = training
+#                 participant.batch = batch
+#                 participant.batch_number = batch_number
+#                 participant.total_training_hours = batch.total_training_hours
+#                 participant.save()
+#                 messages.success(request, "✅ Participant added successfully.")
+#                 return redirect('dashboard:participant_list', training_id=training.id, batch_id=batch.id)
+#     else:
+#         form = ParticipantForm()
+#
+#     return render(request, 'dashboard/add_participant.html', {
+#         'form': form,
+#         'training': training,
+#         'batch': batch,
+#         'batch_number': batch_number
+#     })
 
 def add_participant(request, training_id, batch_id, batch_number):
     training = get_object_or_404(Training, pk=training_id)
@@ -36,20 +69,37 @@ def add_participant(request, training_id, batch_id, batch_number):
         form = ParticipantForm(request.POST)
         if form.is_valid():
             official_id = form.cleaned_data.get("Official_ID")
-            exists = Participant.objects.filter(training=training, Official_ID=official_id).exists()
 
-            if exists:
-                existing = Participant.objects.filter(training=training, Official_ID=official_id).first()
-                messages.warning(request, f"This person is already enrolled in Batch #{existing.batch_number}")
-            else:
-                participant = form.save(commit=False)
-                participant.training = training
-                participant.batch = batch
-                participant.batch_number = batch_number
-                participant.total_training_hours = batch.total_training_hours
-                participant.save()
-                messages.success(request, "✅ Participant added successfully.")
-                return redirect('dashboard:participant_list', training_id=training.id, batch_id=batch.id)
+            # Check for overlapping date conflicts
+            conflicts = Participant.objects.filter(
+                Official_ID=official_id
+            ).filter(
+                Q(batch__start_date__lte=batch.end_date) & Q(batch__end_date__gte=batch.start_date)
+            )
+
+            if conflicts.exists():
+                conflict = conflicts.first()
+                messages.error(
+                    request,
+                    f"This person is already attached with '{conflict.training.title}' training "
+                    f"from {conflict.batch.start_date} to {conflict.batch.end_date}."
+                )
+                return render(request, 'dashboard/add_participant.html', {
+                    'form': form,
+                    'training': training,
+                    'batch': batch,
+                    'batch_number': batch_number
+                })
+
+            # If no conflict, save participant
+            participant = form.save(commit=False)
+            participant.training = training
+            participant.batch = batch
+            participant.batch_number = batch_number
+            participant.total_training_hours = batch.total_training_hours
+            participant.save()
+            messages.success(request, "✅ Participant added successfully.")
+            return redirect('dashboard:participant_list', training_id=training.id, batch_id=batch.id)
     else:
         form = ParticipantForm()
 
