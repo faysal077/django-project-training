@@ -32,7 +32,9 @@ from dashboard.forms import TrainingForm
 from django.contrib import messages
 from django.http import JsonResponse
 from django.template.loader import render_to_string
+from django.contrib.auth.decorators import login_required
 
+@login_required
 
 def list_trainings(request):
     trainings = Training.objects.order_by('-created_at')

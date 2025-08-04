@@ -3,7 +3,9 @@ from dashboard.models import Training, Participant, FinancialClearance
 from django.db.models import Q, Count, Sum
 from django.utils.safestring import mark_safe
 import json
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def dashboard_view(request):
     current_fiscal_year = "2024-2025"
 

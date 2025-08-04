@@ -6,7 +6,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from dashboard.models import Training, Batch
 from dashboard.forms import BatchForm
+from django.contrib.auth.decorators import login_required
 
+@login_required
 
 def add_batch(request, training_id):
     training = get_object_or_404(Training, pk=training_id)

@@ -4,7 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from dashboard.models import Attachment, Batch, Training
 from dashboard.forms import AttachmentForm
+from django.contrib.auth.decorators import login_required
 
+@login_required
 
 def list_attachments(request, training_id, batch_id):
     training = get_object_or_404(Training, pk=training_id)

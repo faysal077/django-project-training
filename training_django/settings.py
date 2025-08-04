@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'dashboard.apps.DashboardConfig',
     'search.apps.SearchConfig',
     'rest_framework',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -127,6 +128,9 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
+LOGIN_URL = '/login/'  # Or whatever your login URL is
+LOGIN_REDIRECT_URL = '/dashboard/'  # Redirect after successful login
+LOGOUT_REDIRECT_URL = '/login/'     # Redirect after logout
 
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'

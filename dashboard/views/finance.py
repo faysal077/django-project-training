@@ -2,7 +2,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from dashboard.models import Batch, FinancialClearance, Training
 from dashboard.forms import FinancialClearanceForm
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def financial_clearance_view(request, training_id, batch_id):
     training = get_object_or_404(Training, pk=training_id)
     batch = get_object_or_404(Batch, pk=batch_id)

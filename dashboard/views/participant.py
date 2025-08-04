@@ -8,6 +8,10 @@ from django.shortcuts import get_object_or_404
 from dashboard.models import Participant, Training, Batch
 from docx import Document
 from docx.shared import Inches
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def list_participants(request, training_id, batch_id):
     training = get_object_or_404(Training, id=training_id)
     batch = get_object_or_404(Batch, id=batch_id)

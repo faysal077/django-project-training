@@ -15,15 +15,28 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from training_app import views
 
+from django.contrib import admin
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
+from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('', include('dashboard.urls', namespace='dashboard')),  # Main dashboard app
-    path('search/', include('search.urls', namespace='search')),
+    path('login/', include('accounts.urls')),  # Login and logout
 
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Root URL redirects to login or dashboard
+    path('', lambda request: redirect('accounts:login') if not request.user.is_authenticated else redirect('dashboard:index')),
+
+    path('dashboard/', include('dashboard.urls', namespace='dashboard')),
+    path('search/', include('search.urls', namespace='search')),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

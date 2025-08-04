@@ -7,6 +7,9 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import JsonResponse, HttpResponse
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
+
+@login_required
 def search_dashboard(request):
     #return render(request, 'search/_search_dashboard_template.html')
     return render(request, 'basee.html')
