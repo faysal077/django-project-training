@@ -3,8 +3,6 @@ from django.db import models
 # Create your models here.
 from django.db import models
 
-
-
 class Training(models.Model):
     TRAINING_TYPE_CHOICES = [
         ('ইন-হাউজ/অভ্যন্তরীণ', 'ইন-হাউজ/অভ্যন্তরীণ'),
@@ -29,7 +27,7 @@ class Batch(models.Model):
     training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='batches')
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
-    fiscal_year = models.CharField(max_length=10, null=True, blank=True)
+    fiscal_year = models.CharField(max_length=10, default="N/A")  # <- default added
     batch_number = models.IntegerField()
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
@@ -38,6 +36,7 @@ class Batch(models.Model):
 
     def __str__(self):
         return f"{self.training.title} - Batch {self.batch_number}"
+
 
 '''
 class Batch(models.Model):

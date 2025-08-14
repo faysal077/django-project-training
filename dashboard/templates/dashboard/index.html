@@ -1,111 +1,338 @@
-{% extends 'base.html' %}
-
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block title %}Dashboard{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<h2 class="mb-4 text-center">Dashboard</h2>#}
+{#<!--#}
+{#<div class="row text-center">#}
+{#    <div class="col-md-4 mb-3">#}
+{#        <div class="bg-info text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ current_year_trainings|default:"0" }}</h3>#}
+{#            <p>Trainings This Fiscal Year</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-4 mb-3">#}
+{#        <div class="bg-success text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_participants|default:"0" }}</h3>#}
+{#            <p>Total Participants</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-4 mb-3">#}
+{#        <div class="bg-primary text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_participants_this_year|default:"0" }}</h3>#}
+{#            <p>Participants This Fiscal Year</p>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{##}
+{#<div class="row text-center mt-4">#}
+{#    <div class="col-md-4 mb-3">#}
+{#        <div class="bg-warning text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_expenses|default:"0" }}</h3>#}
+{#            <p>Total Financial Expenses</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-4 mb-3">#}
+{#        <div class="bg-dark text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_expenses_this_year|default:"0" }}</h3>#}
+{#            <p>Financial Expenses This Year</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-4 mb-3">#}
+{#        <div class="bg-danger text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_trainings|default:"0" }}</h3>#}
+{#            <p>Total Trainings</p>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#!-->#}
+{#    <!-- Fiscal Year Filter -->#}
+{#<form method="get" class="mb-4 text-center">#}
+{#    <label for="fiscal_year">Select Fiscal Year:</label>#}
+{#    <select name="fiscal_year" id="fiscal_year" class="form-select d-inline-block w-auto" onchange="this.form.submit()">#}
+{#        {% for year in fiscal_years %}#}
+{#            <option value="{{ year }}" {% if selected_year == year %}selected{% endif %}>{{ year }}</option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+{#</form>#}
+{##}
+{#<!-- Cards -->#}
+{#<div class="row text-center">#}
+{#    <div class="col-md-3 mb-3">#}
+{#        <div class="bg-info text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_trainings }}</h3>#}
+{#            <p>Total Trainings</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-3 mb-3">#}
+{#        <div class="bg-success text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_participants }}</h3>#}
+{#            <p>Total Participants</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-3 mb-3">#}
+{#        <div class="bg-warning text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_expenses }}</h3>#}
+{#            <p>Total Financial Expenses</p>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-md-3 mb-3">#}
+{#        <div class="bg-primary text-white p-4 rounded shadow-sm">#}
+{#            <h3>{{ total_batches }}</h3>#}
+{#            <p>Total Batches</p>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#<div class="row mt-4">#}
+{#    <div class="col-lg-6">#}
+{#        <div class="card">#}
+{#            <div class="card-body">#}
+{#                <h5 class="card-title">Participant Statistics</h5>#}
+{#                <div id="participantChart"></div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#    <div class="col-lg-6">#}
+{#        <div class="card">#}
+{#            <div class="card-body">#}
+{#                <h5 class="card-title">Financial Activities</h5>#}
+{#                <div id="financialChart"></div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{#</div>#}
+{#{% endblock %}#}
+{##}
+{#{% block extra_js %}#}
+{#<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>#}
+{#<script>#}
+{#    document.addEventListener("DOMContentLoaded", function () {#}
+{#        // === Participant Chart ===#}
+{#        const participantChartOptions = {#}
+{#            chart: { type: 'line', height: 350 },#}
+{#            series: [#}
+{#                { name: 'Total', data: {{ participant_total|safe }} },#}
+{#                { name: 'Male', data: {{ participant_male|safe }} },#}
+{#                { name: 'Female', data: {{ participant_female|safe }} }#}
+{#            ],#}
+{#            xaxis: {#}
+{#                categories: {{ participant_years|safe }},#}
+{#                title: { text: "Fiscal Year" }#}
+{#            },#}
+{#            yaxis: { title: { text: "Number of Participants" } },#}
+{#            colors: ['#008FFB', '#00E396', '#FF4560']#}
+{#        };#}
+{##}
+{#        const participantChart = new ApexCharts(document.querySelector("#participantChart"), participantChartOptions);#}
+{#        participantChart.render();#}
+{##}
+{#        // === Financial Chart ===#}
+{#        const financialChartOptions = {#}
+{#            chart: { type: 'line', height: 350 },#}
+{#            series: [#}
+{#                { name: 'Total Spent', data: {{ financial_spent|safe }} }#}
+{#            ],#}
+{#            xaxis: {#}
+{#                categories: {{ financial_years|safe }},#}
+{#                title: { text: "Fiscal Year" }#}
+{#            },#}
+{#            yaxis: { title: { text: "Amount Spent" } },#}
+{#            colors: ['#FF9800']#}
+{#        };#}
+{##}
+{#        const financialChart = new ApexCharts(document.querySelector("#financialChart"), financialChartOptions);#}
+{#        financialChart.render();#}
+{#    });#}
+{#</script>#}
+{#{% endblock %}#}
+{##}
+{% extends "base.html" %}
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
 <h2 class="mb-4 text-center">Dashboard</h2>
 
-<div class="row text-center">
-    <div class="col-md-4 mb-3">
-        <div class="bg-info text-white p-4 rounded shadow-sm">
-            <h3>{{ current_year_trainings|default:"0" }}</h3>
-            <p>Trainings This Fiscal Year</p>
-        </div>
-    </div>
-    <div class="col-md-4 mb-3">
-        <div class="bg-success text-white p-4 rounded shadow-sm">
-            <h3>{{ total_participants|default:"0" }}</h3>
-            <p>Total Participants</p>
-        </div>
-    </div>
-    <div class="col-md-4 mb-3">
-        <div class="bg-primary text-white p-4 rounded shadow-sm">
-            <h3>{{ total_participants_this_year|default:"0" }}</h3>
-            <p>Participants This Fiscal Year</p>
-        </div>
+<!-- Fiscal Year Dropdown -->
+<div class="row mb-4">
+    <div class="col-md-4 offset-md-4 text-center">
+        <select id="fiscalYearSelect" class="form-select">
+            {% for year in fiscal_years %}
+                <option value="{{ year }}">{{ year }}</option>
+            {% endfor %}
+        </select>
     </div>
 </div>
 
-<div class="row text-center mt-4">
-    <div class="col-md-4 mb-3">
-        <div class="bg-warning text-white p-4 rounded shadow-sm">
-            <h3>{{ total_expenses|default:"0" }}</h3>
-            <p>Total Financial Expenses</p>
-        </div>
-    </div>
-    <div class="col-md-4 mb-3">
-        <div class="bg-dark text-white p-4 rounded shadow-sm">
-            <h3>{{ total_expenses_this_year|default:"0" }}</h3>
-            <p>Financial Expenses This Year</p>
-        </div>
-    </div>
-    <div class="col-md-4 mb-3">
-        <div class="bg-danger text-white p-4 rounded shadow-sm">
-            <h3>{{ total_trainings|default:"0" }}</h3>
+
+<!-- Cards -->
+<div class="row text-center" id="dashboardCards">
+    <div class="col-md-3 mb-3">
+        <div class="bg-info text-white p-4 rounded shadow-sm">
+            <h3 id="cardTrainings">0</h3>
             <p>Total Trainings</p>
         </div>
     </div>
+    <div class="col-md-3 mb-3">
+        <div class="bg-danger text-white p-4 rounded shadow-sm">
+            <h3 id="cardBatches">0</h3>
+            <p>Total Batches</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="bg-success text-white p-4 rounded shadow-sm">
+            <h3 id="cardParticipants">0</h3>
+            <p>Total Participants</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="bg-warning text-white p-4 rounded shadow-sm">
+            <h3 id="cardExpenses">0</h3>
+            <p>Total Expenses</p>
+        </div>
+    </div>
 </div>
 
-<div class="row mt-4">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Participant Statistics</h5>
-                <div id="participantChart"></div>
+<!-- Charts -->
+    <div class="row mt-4">
+    <!-- Participant Chart -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Participant Statistics</h5>
+                    <div id="participantChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Chart -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Financial Activities</h5>
+                    <div id="financialChart"></div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Financial Activities</h5>
-                <div id="financialChart"></div>
+
+    <div class="row mt-4">
+    <!-- Trainings Chart -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Trainings by Fiscal Year</h5>
+                    <div id="trainingChart"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Batches Chart -->
+        <div class="col-lg-6">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Batches by Fiscal Year</h5>
+                    <div id="batchChart"></div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
+    // === Load Cards ===
+    function loadDashboardData(fiscalYear = "All") {
+        fetch(`/dashboard/data/?fiscal_year=${fiscalYear}`)
+            .then(response => response.json())
+            .then(data => {
+                // Update Cards
+                document.getElementById("cardTrainings").innerText = data.cards.trainings;
+                document.getElementById("cardParticipants").innerText = data.cards.participants;
+                document.getElementById("cardExpenses").innerText = data.cards.expenses;
+                document.getElementById("cardBatches").innerText = data.cards.batches;
+            });
+    }
+
+        // === Initialize ===
     document.addEventListener("DOMContentLoaded", function () {
-        // === Participant Chart ===
-        const participantChartOptions = {
-            chart: { type: 'line', height: 350 },
-            series: [
-                { name: 'Total', data: {{ participant_total|safe }} },
-                { name: 'Male', data: {{ participant_male|safe }} },
-                { name: 'Female', data: {{ participant_female|safe }} }
-            ],
-            xaxis: {
-                categories: {{ participant_years|safe }},
-                title: { text: "Fiscal Year" }
-            },
-            yaxis: { title: { text: "Number of Participants" } },
-            colors: ['#008FFB', '#00E396', '#FF4560']
-        };
+        loadDashboardData("All");  // update cards
+        loadCharts();              // render charts
 
-        const participantChart = new ApexCharts(document.querySelector("#participantChart"), participantChartOptions);
-        participantChart.render();
-
-        // === Financial Chart ===
-        const financialChartOptions = {
-            chart: { type: 'line', height: 350 },
-            series: [
-                { name: 'Total Spent', data: {{ financial_spent|safe }} }
-            ],
-            xaxis: {
-                categories: {{ financial_years|safe }},
-                title: { text: "Fiscal Year" }
-            },
-            yaxis: { title: { text: "Amount Spent" } },
-            colors: ['#FF9800']
-        };
-
-        const financialChart = new ApexCharts(document.querySelector("#financialChart"), financialChartOptions);
-        financialChart.render();
+        // Handle fiscal year change
+        document.getElementById("fiscalYearSelect").addEventListener("change", function () {
+            loadDashboardData(this.value);
+            // ⚠ currently charts show all years,
+            // if you also want charts to filter by year,
+            // we need to pass ?fiscal_year=... into loadCharts()
+        });
     });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+let participantChart, financialChart, trainingChart, batchChart;
+
+function loadCharts() {
+    fetch("/dashboard/charts/")
+        .then(response => response.json())
+        .then(data => {
+
+            // Destroy old charts before re-rendering
+            if (participantChart) participantChart.destroy();
+            if (financialChart) financialChart.destroy();
+            if (trainingChart) trainingChart.destroy();
+            if (batchChart) batchChart.destroy();
+
+            // === Participant Chart ===
+            participantChart = new ApexCharts(document.querySelector("#participantChart"), {
+                chart: { type: 'line', height: 350 },
+                series: [
+                    { name: 'Total', data: data.participants.total },
+                    { name: 'Male', data: data.participants.male },
+                    { name: 'Female', data: data.participants.female }
+                ],
+                xaxis: { categories: data.participants.years, title: { text: "Fiscal Year" } },
+                colors: ['#008FFB', '#00E396', '#FF4560']
+            });
+            participantChart.render();
+
+            // === Financial Chart ===
+            financialChart = new ApexCharts(document.querySelector("#financialChart"), {
+                chart: { type: 'line', height: 350 },
+                series: [{ name: 'Total Spent', data: data.financials.spent }],
+                xaxis: { categories: data.financials.years, title: { text: "Fiscal Year" } },
+                colors: ['#FF9800']
+            });
+            financialChart.render();
+
+            // === Trainings Chart ===
+            trainingChart = new ApexCharts(document.querySelector("#trainingChart"), {
+                chart: { type: 'bar', height: 350 },
+                series: [{ name: 'Total Trainings', data: data.trainings.counts }],
+                xaxis: { categories: data.trainings.years, title: { text: "Fiscal Year" } },
+                colors: ['#3F51B5']
+            });
+            trainingChart.render();
+
+            // === Batches Chart ===
+            batchChart = new ApexCharts(document.querySelector("#batchChart"), {
+                chart: { type: 'bar', height: 350 },
+                series: [{ name: 'Total Batches', data: data.batches.counts }],
+                xaxis: { categories: data.batches.years, title: { text: "Fiscal Year" } },
+                colors: ['#9C27B0']
+            });
+            batchChart.render();
+        });
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadDashboardData("All");  // updates cards
+    loadCharts();              // loads charts
+});
+</script>
+
+
 {% endblock %}

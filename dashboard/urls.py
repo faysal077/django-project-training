@@ -5,6 +5,8 @@ app_name = "dashboard"
 
 urlpatterns = [
     path('', index.dashboard_view, name='index'),
+    path('data/', index.dashboard_data, name="data"),
+    path('charts/', index.dashboard_charts, name="charts"),  # ✅ important
 
     # Trainings
     path('trainings/', training.list_trainings, name='training_list'),
