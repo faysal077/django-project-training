@@ -1,9 +1,9 @@
-# from django.shortcuts import render
-# from dashboard.models import Training, Participant, FinancialClearance
-# from django.db.models import Q, Count, Sum
-# from django.utils.safestring import mark_safe
-# import json
-# from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from dashboard.models import Training, Participant, FinancialClearance
+from django.db.models import Q, Count, Sum
+from django.utils.safestring import mark_safe
+import json
+from django.contrib.auth.decorators import login_required
 #
 # @login_required
 # def dashboard_view(request):
@@ -74,7 +74,7 @@
 #     }
 #
 #     return render(request, "dashboard/index.html", context)
-
+from django.contrib.auth.decorators import login_required
 ################
 ### WORKED ###
 ################
@@ -133,7 +133,7 @@ from django.db.models import Count, Sum, Q, Value
 from django.db.models.functions import Coalesce
 from dashboard.models import Training, Batch, Participant, FinancialClearance
 from django.db.models import DecimalField
-
+@login_required
 # Dashboard page
 def dashboard_view(request):
     fiscal_years = [
@@ -148,6 +148,7 @@ def dashboard_view(request):
 
 
 # API for cards
+@login_required
 def dashboard_data(request):
     fiscal_year = request.GET.get("fiscal_year", "All")
 
@@ -173,6 +174,7 @@ def dashboard_data(request):
 
 
 # API for charts
+@login_required
 def dashboard_charts(request):
     # === Participant Chart ===
     participant_chart = (

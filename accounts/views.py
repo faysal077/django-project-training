@@ -17,7 +17,7 @@ def custom_login_view(request):
         if user:
             login(request, user)
             # Redirect based on user type
-            if username == 'tr@n1n85ec':
+            if username == 'tr@n1n85ec1':
                 return redirect('dashboard:index')  # dashboard 1
             # elif username == 'admin2':
             #     return redirect('search:index')  # dashboard 2
