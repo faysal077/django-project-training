@@ -1,0 +1,134 @@
+{% extends "basee.html" %}
+{% block title %}Search by Timeline{% endblock%}
+{% block content %}
+<h3>Search by Timeline</h3>
+<h3>Search by Timeline</h3>
+<h3>Search by Timeline</h3>
+
+<form method="get" class="flex items-center gap-4 mb-6">
+
+    <!-- Fiscal Year Dropdown -->
+    <select name="fiscal_year" class="border px-4 py-2 rounded">
+        <option value="">Select Fiscal Year</option>
+
+        {% for fy in fiscal_years %}
+            <option value="{{ fy }}"
+                {% if selected_fiscal_year == fy %}selected{% endif %}>
+                {{ fy }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- Month Dropdown -->
+    <select name="month" class="border px-4 py-2 rounded">
+
+        <!-- Default All -->
+        <option value="all"
+            {% if selected_month == "all" %}selected{% endif %}>
+            All Months
+        </option>
+
+        <option value="1"  {% if selected_month == "1" %}selected{% endif %}>January</option>
+        <option value="2"  {% if selected_month == "2" %}selected{% endif %}>February</option>
+        <option value="3"  {% if selected_month == "3" %}selected{% endif %}>March</option>
+        <option value="4"  {% if selected_month == "4" %}selected{% endif %}>April</option>
+        <option value="5"  {% if selected_month == "5" %}selected{% endif %}>May</option>
+        <option value="6"  {% if selected_month == "6" %}selected{% endif %}>June</option>
+        <option value="7"  {% if selected_month == "7" %}selected{% endif %}>July</option>
+        <option value="8"  {% if selected_month == "8" %}selected{% endif %}>August</option>
+        <option value="9"  {% if selected_month == "9" %}selected{% endif %}>September</option>
+        <option value="10" {% if selected_month == "10" %}selected{% endif %}>October</option>
+        <option value="11" {% if selected_month == "11" %}selected{% endif %}>November</option>
+        <option value="12" {% if selected_month == "12" %}selected{% endif %}>December</option>
+
+    </select>
+    <select name="training_type" class="border px-4 py-2 rounded">
+
+        <option value="all"
+            {% if selected_training_type == "all" %}selected{% endif %}>
+            All Training Types
+        </option>
+
+        {% for value, label in training_types %}
+            <option value="{{ value }}"
+                {% if selected_training_type == value %}selected{% endif %}>
+                {{ label }}
+            </option>
+        {% endfor %}
+
+    </select>
+
+    <!-- Go Button -->
+    <button type="submit"
+        class="bg-green-600 text-black px-5 py-2 rounded-md hover:bg-green-700 font-semibold">
+    Search
+</button>
+
+<a href="{% url 'search:download_word' %}?fiscal_year={{ selected_fiscal_year }}&month={{ selected_month }}&training_type={{ selected_training_type }}" class="bg-green-700 text-white px-4 py-2 rounded"  style="float: right;">Download Word</a>
+
+
+</form>
+{% if selected_fiscal_year %}
+
+
+    <!-- Totals -->
+    <div class="flex gap-8 mb-6 text-sm font-semibold">
+        <div>Total Trainings: {{ total_trainings }}</div>
+        <div>Total Batches: {{ total_batches }}</div>
+        <div>Total Participants: {{ total_participants }}</div>
+    </div>
+
+    <!-- Result Table -->
+    {% if participants %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-200 text-sm">
+                <thead class="bg-gray-100">
+                    <tr>
+			<th class="px-4 py-2 border">Sl</th>
+                        <th class="px-4 py-2 border">Training</th>
+                        <th class="px-4 py-2 border">Batch</th>
+                        <th class="px-4 py-2 border">Participant</th>
+                        <th class="px-4 py-2 border">Designation</th>
+                        <th class="px-4 py-2 border">Office Address</th>
+                        <th class="px-4 py-2 border">Start Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participants %}
+                        <tr class="hover:bg-gray-50">
+			    <td class="px-4 py-2 border">
+                                {{ forloop.counter }}
+                            </td>
+                            <td class="px-4 py-2 border">
+                                {{ p.training.title }}
+                            </td>
+                            <td class="px-4 py-2 border">
+                                Batch {{ p.batch.batch_number }}
+                            </td>
+                            <td class="px-4 py-2 border">
+                                {{ p.name }}
+                            </td>
+                            <td class="px-4 py-2 border">
+                                {{ p.designation }}
+                            </td>
+                            <td class="px-4 py-2 border">
+                                {{ p.office_address }}
+                            </td>
+                            <td class="px-4 py-2 border">
+                                {{ p.batch.start_date }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    {% else %}
+        <div class="text-red-500 font-semibold">
+            No records found for selected fiscal year.
+        </div>
+    {% endif %}
+
+{% endif %}
+{% endblock %}
+

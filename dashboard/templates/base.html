@@ -23,7 +23,8 @@
           <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:index' %}">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:add_training' %}">Add Training</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'search:home' %}">Search</a></li>
-        </ul>
+	  <li class="nav-item"> <a class="nav-link {% if request.resolver_match.namespace == 'employee_list' %}active{% endif %}" href="{% url 'employee_list:home' %}"> Employee List </a> </li>
+	  </ul>
       </div>
     </div>
   </nav>
@@ -37,3 +38,5 @@
   {% block extra_js %}{% endblock %}
 </body>
 </html>
+
+

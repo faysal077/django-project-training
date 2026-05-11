@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Employee List{% endblock %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto mt-10">
+
+    <h2 class="text-xl font-bold mb-6">Employee Search</h2>
+
+    <!-- Search Form -->
+    <form method="get" class="bg-white p-6 rounded-lg shadow mb-6">
+
+        <!-- Radio Buttons -->
+        <div class="flex space-x-6 mb-4">
+            <label class="flex items-center space-x-2">
+                <input type="radio" name="search_type" value="name"
+                       {% if search_type == "name" %}checked{% endif %} required>
+                <span>Search by Name</span>
+            </label>
+
+            <label class="flex items-center space-x-2">
+                <input type="radio" name="search_type" value="id"
+                       {% if search_type == "id" %}checked{% endif %}>
+                <span>Search by ID</span>
+            </label>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="flex space-x-3">
+            <input type="text" name="query"
+                   value="{{ query|default:'' }}"
+                   placeholder="Enter Name or ID..."
+                   class="flex-1 border rounded px-4 py-2"
+                   required>
+
+            <button type="submit"
+                    class="bg-indigo-600 text-black px-5 py-2 rounded hover:bg-indigo-700">
+                Search
+            </button>
+        </div>
+
+    </form>
+
+
+    <!-- Results Table -->
+    {% if results %}
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+        <table class="min-w-full text-sm">
+            <thead class="bg-gray-100 text-left">
+                <tr>
+                    <th class="px-4 py-3">Ser</th>
+                    <th class="px-4 py-3">Name</th>
+                    <th class="px-4 py-3">Official ID</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in results %}
+                <tr class="border-t">
+                    <td class="px-4 py-3">{{ forloop.counter }}</td>
+                    <td class="px-4 py-3">{{ item.name }}</td>
+                    <td class="px-4 py-3">{{ item.Official_ID }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif search_type %}
+        <p class="text-red-500 mt-4">No results found.</p>
+    {% endif %}
+
+</div>
+
+{% endblock %}
+

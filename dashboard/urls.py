@@ -11,6 +11,8 @@ urlpatterns = [
     # Trainings
     path('trainings/', training.list_trainings, name='training_list'),
     path('trainings/add/', training.add_training, name='add_training'),
+    path('trainings/update/<int:training_id>/', training.update_training, name='update_training'),
+    path('trainings/delete/<int:training_id>/', training.delete_training, name='delete_training'),
 
     # Batches
     path('batches/add/<int:training_id>/', batch.add_batch, name='add_batch'),

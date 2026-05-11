@@ -23,9 +23,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^2d^_mkrd($*2e4moau^b2o545#(giu5==n-9c!ux(lth%raq&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['training.bscic.gov.bd']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'search.apps.SearchConfig',
     'rest_framework',
     'accounts',
+    'employee_list',
 ]
 
 MIDDLEWARE = [
@@ -83,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'djnagoconnect',         # the name you used in phpMyAdmin
         'USER': 'root',                 # default for XAMPP
-        'PASSWORD': '',                 # default is empty
+        'PASSWORD': 'Bscic@Trgq1w2e3r4t5',                 # default is empty
         'HOST': '127.0.0.1',
         'PORT': '3306',
         'OPTIONS': {
@@ -119,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
 
@@ -131,7 +132,7 @@ USE_TZ = True
 LOGIN_URL = '/login/'  # Or whatever your login URL is
 LOGIN_REDIRECT_URL = '/dashboard/'  # Redirect after successful login
 LOGOUT_REDIRECT_URL = '/login/'     # Redirect after logout
-
+STATIC_ROOT = '/var/www/django-project-training/staticfiles/'
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'

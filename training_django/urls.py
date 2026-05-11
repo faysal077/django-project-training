@@ -38,5 +38,7 @@ urlpatterns = [
 
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('search/', include('search.urls', namespace='search')),
+    path('employee-list/', include('employee_list.urls', namespace='employee_list')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

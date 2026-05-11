@@ -3,106 +3,240 @@
 {% block title %}Add Training{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center">
-    <button class="btn btn-success" id="openAddTrainingModal">Add New Training</button>
+<!-- External Dependencies -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+<style>
+    /* Professional CSS Counter for Auto-Incremental Serial Numbers across pages */
+    .serial-table {
+        /* trainings.start_index is provided by Django Pagination (default to 1 if not paginated) */
+        counter-reset: serial {{ trainings.start_index|default:1|add:"-1" }};
+    }
+    .serial-table tbody tr {
+        counter-increment: serial;
+    }
+    .serial-number::before {
+        content: counter(serial);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(5px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-row {
+        animation: fadeIn 0.3s ease-out forwards;
+    }
+
+    /* Custom scrollbar for better UX */
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f8fafc;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 10px;
+    }
+</style>
+
+<div class="container mx-auto py-8 px-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-800 tracking-tight">Existing Trainings</h2>
+            
+        </div>
+        <button id="openAddTrainingModal" class="bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-95 flex items-center font-bold">
+            <i class="fa-solid fa-plus mr-2 text-xs"></i>Add New Training
+        </button>
+    </div>
+
+    <!-- Tabular Format -->
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto custom-scrollbar">
+            <table class="min-w-full divide-y divide-gray-200 serial-table">
+                <thead class="bg-gray-50/50">
+                    <tr>
+                        <th class="px-4 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b w-12">Serial</th>
+                        <th class="px-4 py-3 text-left text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b">Training Title</th>
+                        <th class="px-4 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b w-28">Total Batches</th>
+                        <th class="px-4 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b w-32">Total Participants</th>
+                        <th class="px-4 py-3 text-center text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b w-32">Batches</th>
+                        <th class="px-4 py-3 text-right text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] border-b w-28">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="trainingTableBody" class="bg-white divide-y divide-gray-100">
+                    {% include 'dashboard/_training_list.html' %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Section (Optimized for 15 per page) -->
+        {% if trainings.has_other_pages or trainings.paginator.count > 0 %}
+        <div class="px-6 py-3 bg-slate-50/50 border-t border-slate-100 flex items-center justify-between">
+            <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                <div>
+                    <p class="text-xs text-slate-600">
+                        Showing <span class="font-bold text-slate-900">{{ trainings.start_index }}</span> to
+                        <span class="font-bold text-slate-900">{{ trainings.end_index }}</span> of
+                        <span class="font-bold text-slate-900">{{ trainings.paginator.count }}</span> trainings
+                    </p>
+                </div>
+                <div>
+                    <nav class="relative z-0 inline-flex rounded-lg shadow-sm -space-x-px bg-white border border-slate-200 overflow-hidden" aria-label="Pagination">
+                        {% if trainings.has_previous %}
+                        <a href="?page={{ trainings.previous_page_number }}" class="relative inline-flex items-center px-2 py-1.5 border-r border-slate-200 text-xs font-medium text-slate-500 hover:bg-slate-50 transition-colors">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                        {% endif %}
+
+                        {% for i in trainings.paginator.page_range %}
+                            {% if trainings.number == i %}
+                            <span class="relative inline-flex items-center px-3 py-1.5 bg-indigo-600 text-xs font-bold text-white">
+                                {{ i }}
+                            </span>
+                            {% elif i > trainings.number|add:'-3' and i < trainings.number|add:'3' %}
+                            <a href="?page={{ i }}" class="relative inline-flex items-center px-3 py-1.5 border-r border-slate-200 bg-white text-xs font-medium text-slate-600 hover:bg-slate-50 transition-colors">
+                                {{ i }}
+                            </a>
+                            {% endif %}
+                        {% endfor %}
+
+                        {% if trainings.has_next %}
+                        <a href="?page={{ trainings.next_page_number }}" class="relative inline-flex items-center px-2 py-1.5 text-xs font-medium text-slate-500 hover:bg-slate-50 transition-colors">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                        {% endif %}
+                    </nav>
+                </div>
+            </div>
+            <!-- Mobile Pagination -->
+            <div class="flex-1 flex justify-between sm:hidden">
+                {% if trainings.has_previous %}
+                <a href="?page={{ trainings.previous_page_number }}" class="relative inline-flex items-center px-3 py-1.5 border border-slate-300 text-xs font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50">
+                    Previous
+                </a>
+                {% endif %}
+                {% if trainings.has_next %}
+                <a href="?page={{ trainings.next_page_number }}" class="ml-3 relative inline-flex items-center px-3 py-1.5 border border-slate-300 text-xs font-medium rounded-md text-slate-700 bg-white hover:bg-slate-50">
+                    Next
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
 </div>
 
 <!-- Modal for Adding New Training -->
-<div id="addTrainingModal" class="modal" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Add New Training</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form id="addTrainingForm" method="post" action="{% url 'dashboard:add_training' %}">
-                    {% csrf_token %}
+<div id="addTrainingModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="modalContainer">
+        <div class="px-8 py-6 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
+            <h5 class="text-xl font-black text-slate-800">New Training Program</h5>
+            <button id="closeModal" class="text-slate-400 hover:text-slate-600 p-2 hover:bg-slate-200 rounded-xl transition-all">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="p-8">
+            <form id="addTrainingForm" method="post" action="{% url 'dashboard:add_training' %}" class="space-y-5">
+                {% csrf_token %}
+                <div class="training-form-fields space-y-2">
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary w-100">Add Training</button>
-                </form>
-            </div>
+                </div>
+                <div class="flex space-x-3 pt-4">
+                   <button type="button" id="cancelModal" class="flex-1 px-4 py-3 text-slate-500 font-bold hover:bg-slate-100 rounded-xl transition-all">Cancel</button>
+                   <button type="submit" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-xl shadow-lg shadow-indigo-100 transition-all active:scale-95">
+                       Create Training
+                   </button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
-<h3 class="my-4">Existing Trainings</h3>
-<div id="trainings">
-    {% include 'dashboard/_training_list.html' %}
-</div>
-{% endblock %}
-
-{% block extra_js %}
-
-<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
 <script>
-document.getElementById("openAddTrainingModal").addEventListener("click", function() {
-    let modal = new bootstrap.Modal(document.getElementById("addTrainingModal"));
-    modal.show();
-});
+    lucide.createIcons();
 
-document.getElementById("addTrainingForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    let form = this;
+    const modal = document.getElementById("addTrainingModal");
+    const modalContainer = document.getElementById("modalContainer");
+    const openBtn = document.getElementById("openAddTrainingModal");
+    const closeBtn = document.getElementById("closeModal");
+    const cancelBtn = document.getElementById("cancelModal");
 
-    fetch(form.action, {
-        method: "POST",
-        body: new FormData(form),
-        headers: {
-            "X-Requested-With": "XMLHttpRequest"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the training list
-            document.getElementById("trainings").innerHTML = data.html;
-
-            // Close modal
-            let modalEl = document.getElementById("addTrainingModal");
-            let modal = bootstrap.Modal.getInstance(modalEl);
-            modal.hide();
-
-            // Reset form
-            form.reset();
-
-            // Show Toastify success message
-            Toastify({
-                text: "Training added successfully.",
-                duration: 2000,
-                close: true,
-                gravity: "top",
-                position: "right",
-                backgroundColor: "green"
-            }).showToast();
+    const toggleModal = (show) => {
+        if (show) {
+            modal.classList.remove("hidden");
+            modal.classList.add("flex");
+            setTimeout(() => {
+                modalContainer.classList.remove("scale-95", "opacity-0");
+                modalContainer.classList.add("scale-100", "opacity-100");
+            }, 10);
         } else {
-            // Show error notification
-            Toastify({
-                text: "Please correct the errors before submitting.",
-                duration: 2000,
-                close: true,
-                gravity: "top",
-                position: "right",
-                backgroundColor: "red"
-            }).showToast();
+            modalContainer.classList.add("scale-95", "opacity-0");
+            modalContainer.classList.remove("scale-100", "opacity-100");
+            setTimeout(() => {
+                modal.classList.add("hidden");
+                modal.classList.remove("flex");
+            }, 200);
         }
-    })
-    .catch(err => {
-        console.error("Error:", err);
-        Toastify({
-            text: "An error occurred while adding training.",
-            duration: 2000,
-            close: true,
-            gravity: "top",
-            position: "right",
-            backgroundColor: "red"
-        }).showToast();
+    };
+
+    if (openBtn) openBtn.addEventListener("click", () => toggleModal(true));
+    if (closeBtn) closeBtn.addEventListener("click", () => toggleModal(false));
+    if (cancelBtn) cancelBtn.addEventListener("click", () => toggleModal(false));
+
+    // AJAX Form Submission
+    document.getElementById("addTrainingForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+        const form = this;
+
+        fetch(form.action, {
+            method: "POST",
+            body: new FormData(form),
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                if (data.html) {
+                    document.getElementById("trainingTableBody").innerHTML = data.html;
+                    lucide.createIcons();
+                } else {
+                    window.location.reload();
+                }
+
+                toggleModal(false);
+                form.reset();
+
+                Toastify({
+                    text: "Training added successfully!",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    style: { background: "linear-gradient(to right, #6366f1, #4f46e5)", borderRadius: "12px" }
+                }).showToast();
+            } else {
+                Toastify({
+                    text: "Please correct the highlighted errors.",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    style: { background: "#ef4444", borderRadius: "12px" }
+                }).showToast();
+            }
+        })
+        .catch(err => {
+            console.error("Error:", err);
+            Toastify({
+                text: "Server connection failed.",
+                duration: 3000,
+                style: { background: "#dc2626", borderRadius: "12px" }
+            }).showToast();
+        });
     });
-});
 </script>
-
-
-
 {% endblock %}

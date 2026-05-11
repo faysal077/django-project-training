@@ -2,7 +2,7 @@
 {% block title %}Search Participant by Name{% endblock %}
 {% block content %}
     <h3>Search Participant by Name</h3>
-
+    <h3>Search Participant by Name</h3>
     <form method="post">
         {% csrf_token %}
         <div class="input-group mb-3">
@@ -24,6 +24,7 @@
                         <th>Official ID</th>
                         <th>Designation</th>
                         <th>Office</th>
+			<th>Training Title</th>
                         <th>Training Start</th>
                         <th>Training End</th>
                         <th>Batch</th>
@@ -36,6 +37,7 @@
                             <td>{{ p.Official_ID }}</td>
                             <td>{{ p.designation }}</td>
                             <td>{{ p.office_address }}</td>
+			    <td>{{ p.training_title }}</td>
                             <td>{{ p.start_date }}</td>
                             <td>{{ p.end_date }}</td>
                             <td>{{ p.batch_number }}</td>

@@ -9,6 +9,7 @@ urlpatterns = [
     path('by-training/', views.search_by_training, name='search_by_training'),
     path('unattended/', views.search_not_taken, name='search_not_taken'),
     path('by-multiple/', views.search_by_multiple_trainings, name='search_by_multiple_trainings'),
-
+    path('search-by-timeline/', views.search_by_timeline, name='search_by_timeline'),
+    path("download-word/", views.download_word, name="download_word"),
 
 ]
