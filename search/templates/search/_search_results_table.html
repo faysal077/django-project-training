@@ -1,0 +1,25 @@
+{% if trainings %}
+    <h5>Training History for "{{ name }}"</h5>
+    <table class="table table-bordered">
+        <thead class="table-secondary">
+            <tr>
+                <th>Training Name</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Batch</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in trainings %}
+            <tr>
+                <td>{{ t.title }}</td>
+                <td>{{ t.start_date }}</td>
+                <td>{{ t.end_date }}</td>
+                <td>{{ t.batch_number }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p class="text-danger">No results found for "{{ name }}".</p>
+{% endif %}

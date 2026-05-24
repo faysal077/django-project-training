@@ -1,0 +1,43 @@
+{% extends "basee.html" %}
+
+{% block title %}Participants NOT Attended{% endblock %}
+
+{% block search_content %}
+
+<h3>Search Participants Who Did NOT Attend a Training</h3>
+<form method="post">
+    {% csrf_token %}
+    <div class="input-group mb-3">
+        <input type="text" name="training_name" class="form-control" placeholder="Enter Training Name" required value="{{ training_name }}">
+        <button class="btn btn-danger">Search</button>
+    </div>
+</form>
+
+{% if searched %}
+    <h4>Participants who did NOT attend: <strong>{{ training_name }}</strong></h4>
+
+    {% if participants %}
+        <table class="table table-bordered">
+            <thead class="table-warning">
+                <tr>
+                    <th>Name</th>
+                    <th>Designation</th>
+                    <th>Email</th>
+                    <!-- Add more fields as needed -->
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in participants %}
+                    <tr>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.designation }}</td>
+                        <td>{{ p.email }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="text-success">All participants have attended the training "<strong>{{ training_name }}</strong>".</p>
+    {% endif %}
+{% endif %}
+{% endblock %}

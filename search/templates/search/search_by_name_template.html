@@ -1,0 +1,55 @@
+{% extends "basee.html" %}
+
+{% block title %}Search Participant by Name{% endblock %}
+
+{% block search_content %}
+
+    <h3>Search Participant by Name</h3>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-group mb-3">
+            <input type="text" name="participant_name" class="form-control"
+                   placeholder="Enter Participant Name"
+                   required value="{{ participant_name }}">
+            <button class="btn btn-primary">Search</button>
+        </div>
+    </form>
+
+    {% if searched %}
+        <h4>Search Results for: <strong>{{ participant_name }}</strong></h4>
+
+        {% if participants %}
+            <table class="table table-bordered">
+                <thead class="table-success">
+                    <tr>
+                        <th>Name</th>
+                        <th>Official ID</th>
+                        <th>Designation</th>
+                        <th>Office</th>
+			<th>Training Title</th>
+                        <th>Training Start</th>
+                        <th>Training End</th>
+                        <th>Batch</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in participants %}
+                        <tr>
+                            <td>{{ p.name }}</td>
+                            <td>{{ p.Official_ID }}</td>
+                            <td>{{ p.designation }}</td>
+                            <td>{{ p.office_address }}</td>
+			    <td>{{ p.training_title }}</td>
+                            <td>{{ p.start_date }}</td>
+                            <td>{{ p.end_date }}</td>
+                            <td>{{ p.batch_number }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-danger">No participants found with name "<strong>{{ participant_name }}</strong>".</p>
+        {% endif %}
+    {% endif %}
+{% endblock %}
