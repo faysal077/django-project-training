@@ -16,42 +16,55 @@ class TrainingForm(forms.ModelForm):
 class BatchForm(forms.ModelForm):
     class Meta:
         model = Batch
+        # fields = [
+        #     'start_date', 'end_date', 'start_time', 'end_time',
+        #     'total_training_hours', 'fiscal_year'  # ✅ no batch_number here
+        # ]
         fields = [
-            'start_date', 'end_date', 'start_time', 'end_time',
-            'total_training_hours', 'fiscal_year'  # ✅ no batch_number here
+            'start_date',
+            'end_date',
+            'start_time',
+            'end_time',
+            'total_training_hours'
         ]
         widgets = {
             'start_date': forms.DateInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
                 'type': 'date',
                 'id': 'id_start_date'
             }),
+
             'end_date': forms.DateInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
                 'type': 'date',
                 'id': 'id_end_date'
             }),
+
             'start_time': forms.TimeInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
                 'type': 'time',
                 'id': 'id_start_time'
             }),
+
             'end_time': forms.TimeInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
                 'type': 'time',
                 'id': 'id_end_time'
             }),
+
             'total_training_hours': forms.NumberInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 bg-slate-100 text-slate-600',
                 'id': 'id_total_training_hours',
-                'readonly': 'readonly'  # 👈 Optional: make this non-editable
+                'readonly': 'readonly'
             }),
+
             'fiscal_year': forms.TextInput(attrs={
-                'class': 'form-control',
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 bg-slate-100 text-slate-600',
                 'id': 'id_fiscal_year',
-                'readonly': 'readonly'  # 👈 Optional: also make this auto-filled only
+                'readonly': 'readonly'
             }),
         }
+        
 
 '''
 class BatchForm(forms.ModelForm):

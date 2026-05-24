@@ -1,6 +1,6 @@
 from django.urls import path
 from .views import index, training, batch, participant, finance, attachment
-
+from dashboard.views import batch as views
 app_name = "dashboard"
 
 urlpatterns = [
@@ -16,6 +16,8 @@ urlpatterns = [
 
     # Batches
     path('batches/add/<int:training_id>/', batch.add_batch, name='add_batch'),
+    path('batch/<int:training_id>/<int:batch_id>/update/',views.update_batch, name='update_batch'),
+     path('batch/<int:training_id>/<int:batch_id>/delete/',views.delete_batch,name='delete_batch'),
 
     # Update and Delete
     path('participants/update/<int:participant_id>/', participant.update_participant, name='update_participant'),

@@ -6,10 +6,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from dashboard.models import Training, Batch
 from dashboard.forms import BatchForm
+from dashboard.forms import BatchForm
 from django.contrib.auth.decorators import login_required
+from dashboard.models import Batch
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from dashboard.models import Batch
+from dashboard.forms import BatchForm
 
 @login_required
-
 def add_batch(request, training_id):
     training = get_object_or_404(Training, pk=training_id)
     batches = Batch.objects.filter(training=training).order_by('-id')  # ✅ still needed for display
@@ -120,3 +125,101 @@ def list_batches(request, training_id):
         'batches': batches
     })
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+
+
+
+# =========================
+# UPDATE BATCH
+# =========================
+def update_batch(request, training_id, batch_id):
+
+    batch = get_object_or_404(
+        Batch,
+        id=batch_id,
+        training_id=training_id
+    )
+
+    if request.method == 'POST':
+
+        form = BatchForm(
+            request.POST,
+            instance=batch
+        )
+
+        if form.is_valid():
+
+            updated_batch = form.save(commit=False)
+
+            # ✅ Auto recalculate fiscal year
+            start_date = updated_batch.start_date
+
+            if start_date:
+                start_year = start_date.year
+                start_month = start_date.month
+
+                fiscal_start = (
+                    start_year
+                    if start_month >= 7
+                    else start_year - 1
+                )
+
+                updated_batch.fiscal_year = (
+                    f"{fiscal_start}-{fiscal_start + 1}"
+                )
+
+            updated_batch.save()
+
+            messages.success(
+                request,
+                "✅ Batch updated successfully."
+            )
+
+            return redirect(
+                'dashboard:add_batch',
+                training_id=training_id
+            )
+
+        else:
+            print(form.errors)   # ✅ IMPORTANT DEBUG
+            messages.error(
+                request,
+                "❌ Please correct the errors below."
+            )
+
+    else:
+        form = BatchForm(instance=batch)
+
+    context = {
+        'form': form,
+        'batch': batch,
+        'training_id': training_id,
+    }
+
+    return render(
+        request,
+        'dashboard/update_batch.html',
+        context
+    )
+
+
+# =========================
+# DELETE BATCH
+# =========================
+def delete_batch(request, training_id, batch_id):
+    batch = get_object_or_404(
+        Batch,
+        id=batch_id,
+        training_id=training_id
+    )
+
+    if request.method == 'POST':
+        batch.delete()
+
+        messages.success(request, "Batch deleted successfully.")
+
+    return redirect(
+        'dashboard:add_batch',
+        training_id=training_id
+    )
