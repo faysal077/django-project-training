@@ -10,7 +10,28 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from a .env file if present.
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+env_path = BASE_DIR / '.env'
+if env_path.exists():
+    with env_path.open() as env_file:
+        for line in env_file:
+            line = line.strip()
+            if not line or line.startswith('#'):
+                continue
+            if '=' not in line:
+                continue
+            key, value = line.split('=', 1)
+            key = key.strip()
+            value = value.strip().strip('"\'')
+            if key and key not in os.environ:
+                os.environ[key] = value
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -83,11 +104,11 @@ WSGI_APPLICATION = 'training_django.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'djnagoconnect',         # the name you used in phpMyAdmin
-        'USER': 'root',                 # default for XAMPP
-        'PASSWORD': '',                 # default is empty
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
@@ -133,11 +154,12 @@ USE_TZ = True
 LOGIN_URL = '/login/'  # Or whatever your login URL is
 LOGIN_REDIRECT_URL = '/dashboard/'  # Redirect after successful login
 LOGOUT_REDIRECT_URL = '/login/'     # Redirect after logout
-STATIC_ROOT = '/var/www/django-project-training/staticfiles/'
+# STATIC_ROOT = '/var/www/django-project-training/staticfiles/'
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
-
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

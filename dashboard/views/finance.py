@@ -6,9 +6,15 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def financial_clearance_view(request, training_id, batch_id):
-    training = get_object_or_404(Training, pk=training_id)
-    batch = get_object_or_404(Batch, pk=batch_id)
-    financial_records = FinancialClearance.objects.filter(batch=batch).order_by('-created_at')
+    # training = get_object_or_404(Training, pk=training_id)
+    training = get_object_or_404(
+        Training,
+        id=training_id,
+        created_by=request.user,
+        training__created_by=request.user
+    )
+    batch = get_object_or_404(Batch, pk=batch_id, training__created_by=request.user)
+    financial_records = FinancialClearance.objects.filter(batch=batch, training__created_by=request.user).order_by('-created_at')
 
     if request.method == 'POST':
         form = FinancialClearanceForm(request.POST)

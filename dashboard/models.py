@@ -3,12 +3,22 @@ from django.db import models
 # Create your models here.
 from django.db import models
 
+from django.contrib.auth.models import User
+
 class Training(models.Model):
     TRAINING_TYPE_CHOICES = [
         ('ইন-হাউজ/অভ্যন্তরীণ', 'ইন-হাউজ/অভ্যন্তরীণ'),
         ('স্থানীয়', 'স্থানীয়'),
         ('বৈদেশিক', 'বৈদেশিক'),
     ]
+
+    created_by = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='trainings',
+        null=True,       # important for existing data
+        blank=True
+    )
 
     title = models.CharField(max_length=255)
     organizer = models.CharField(max_length=255, default='Unknown')
@@ -21,6 +31,25 @@ class Training(models.Model):
 
     def __str__(self):
         return self.title
+
+# class Training(models.Model):
+#     TRAINING_TYPE_CHOICES = [
+#         ('ইন-হাউজ/অভ্যন্তরীণ', 'ইন-হাউজ/অভ্যন্তরীণ'),
+#         ('স্থানীয়', 'স্থানীয়'),
+#         ('বৈদেশিক', 'বৈদেশিক'),
+#     ]
+
+#     title = models.CharField(max_length=255)
+#     organizer = models.CharField(max_length=255, default='Unknown')
+#     training_type = models.CharField(
+#         max_length=50,
+#         choices=TRAINING_TYPE_CHOICES,
+#         default='ইন-হাউজ/অভ্যন্তরীণ'
+#     )
+#     created_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return self.title
 
 
 class Batch(models.Model):
@@ -37,43 +66,6 @@ class Batch(models.Model):
     def __str__(self):
         return f"{self.training.title} - Batch {self.batch_number}"
 
-
-'''
-class Batch(models.Model):
-    training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='batches')
-    start_date = models.DateField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
-    fiscal_year = models.CharField(max_length=10, null=True, blank=True)
-    batch_number = models.IntegerField()
-    start_time = models.TimeField(null=True, blank=True)
-    end_time = models.TimeField(null=True, blank=True)
-    total_training_hours = models.FloatField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.training.title} - Batch {self.batch_number}"
-'''
-
-'''
-class Batch(models.Model):
-    training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='batches')
-    start_date = models.DateField(null=True, blank=True)
-    end_date = models.DateField(null=True, blank=True)
-    fiscal_year = models.CharField(max_length=10, null=True, blank=True)
-    start_time = models.TimeField(null=True, blank=True)
-    end_time = models.TimeField(null=True, blank=True)
-    total_training_hours = models.FloatField(null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Batch #{self.id} for {self.training.title}"
-
-
-=========================
-python manage.py makemigrations dashboard
-python manage.py migrate
-
-'''
 class Participant(models.Model):
     training = models.ForeignKey(Training, on_delete=models.CASCADE)
     batch = models.ForeignKey(Batch, on_delete=models.CASCADE)

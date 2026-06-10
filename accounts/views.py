@@ -15,16 +15,18 @@ def custom_login_view(request):
         user = authenticate(request, username=username, password=password)
 
         if user:
+            # login(request, user)
+            # # Redirect based on user type
+            # if username == 'tr@n1n85ec1':
+            #     return redirect('dashboard:index')  # dashboard 1
+            # # elif username == 'admin2':
+            # #     return redirect('search:index')  # dashboard 2
+            # else:
+            #     logout(request)
+            #     messages.error(request, 'Unauthorized access.')
+            #     return redirect('accounts:login')
             login(request, user)
-            # Redirect based on user type
-            if username == 'tr@n1n85ec1':
-                return redirect('dashboard:index')  # dashboard 1
-            # elif username == 'admin2':
-            #     return redirect('search:index')  # dashboard 2
-            else:
-                logout(request)
-                messages.error(request, 'Unauthorized access.')
-                return redirect('accounts:login')
+            return redirect('dashboard:index')
         else:
             messages.error(request, 'Invalid username or password')
 

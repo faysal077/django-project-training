@@ -9,9 +9,14 @@ from django.contrib.auth.decorators import login_required
 @login_required
 
 def list_attachments(request, training_id, batch_id):
-    training = get_object_or_404(Training, pk=training_id)
-    batch = get_object_or_404(Batch, pk=batch_id)
-    attachments = Attachment.objects.filter(batch=batch).order_by('-created_at')
+    # training = get_object_or_404(Training, pk=training_id)
+    training = get_object_or_404(
+        Training,
+        id=training_id,
+        created_by=request.user
+    )
+    batch = get_object_or_404(Batch, pk=batch_id, training__created_by=request.user)
+    attachments = Attachment.objects.filter(batch=batch, training__created_by=request.user).order_by('-created_at')
 
     context = {
         'training': training,
@@ -25,8 +30,13 @@ def list_attachments(request, training_id, batch_id):
 @csrf_exempt
 def upload_attachment(request, training_id, batch_id):
     if request.method == 'POST':
-        training = get_object_or_404(Training, pk=training_id)
-        batch = get_object_or_404(Batch, pk=batch_id)
+        # training = get_object_or_404(Training, pk=training_id)
+        training = get_object_or_404(
+            Training,
+            id=training_id,
+            created_by=request.user
+        )
+        batch = get_object_or_404(Batch, pk=batch_id, training__created_by=request.user)
         form = AttachmentForm(request.POST, request.FILES)
         if form.is_valid():
             attachment = form.save(commit=False)
