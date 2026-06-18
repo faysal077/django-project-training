@@ -1,9 +1,12 @@
-from django.urls import path
+from django.urls import include, path
 from .views import index, training, batch, participant, finance, attachment
 from dashboard.views import batch as views
 app_name = "dashboard"
 
 urlpatterns = [
+    
+    path('accounts/', include('accounts.urls')),
+
     path('', index.dashboard_view, name='index'),
     path('data/', index.dashboard_data, name="data"),
     path('charts/', index.dashboard_charts, name="charts"),  # ✅ important

@@ -3,7 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+# from django.contrib.auth import logout
+# from django.shortcuts import redirect
+# from django.contrib import messages
 
 def custom_login_view(request):
     if request.user.is_authenticated:
@@ -32,6 +34,11 @@ def custom_login_view(request):
 
     return render(request, 'accounts/login.html')
 
+
+# def custom_logout_view(request):
+#     logout(request)
+#     messages.success(request, 'You have been logged out.')
+#     return redirect('accounts:login')
 
 def custom_logout_view(request):
     logout(request)

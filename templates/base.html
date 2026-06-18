@@ -20,12 +20,55 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <ul class="navbar-nav ms-auto">
+        <!-- <ul class="navbar-nav ms-auto">
           <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:index' %}">Home</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'dashboard:add_training' %}">Add Training</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'search:home' %}">Search</a></li>
 	        <li class="nav-item"> <a class="nav-link {% if request.resolver_match.namespace == 'employee_list' %}active{% endif %}" href="{% url 'employee_list:home' %}"> Employee List </a> </li>
-	      </ul>
+	      </ul> -->
+        <ul class="navbar-nav ms-auto align-items-center">
+
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard:index' %}">
+                  Home
+              </a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'dashboard:add_training' %}">
+                  Add Training
+              </a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link" href="{% url 'search:home' %}">
+                  Search
+              </a>
+          </li>
+
+          <li class="nav-item">
+              <a class="nav-link {% if request.resolver_match.namespace == 'employee_list' %}active{% endif %}"
+                href="{% url 'employee_list:home' %}">
+                  Employee List
+              </a>
+          </li>
+
+          {% if user.is_authenticated %}
+          <li class="nav-item ms-3">
+              <span class="text-light me-2">
+                  {{ user.username }}
+              </span>
+          </li>
+
+          <li class="nav-item">
+              <a href="{% url 'accounts:logout' %}"
+                class="btn btn-danger btn-sm">
+                  Logout
+              </a>
+          </li>
+          {% endif %}
+
+      </ul>
       </div>
     </div>
   </nav>
