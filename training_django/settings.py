@@ -57,6 +57,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
+    "hello-world-service",
+    "hello-world-service.default.svc.cluster.local",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
