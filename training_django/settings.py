@@ -48,11 +48,21 @@ DEBUG = True
 
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
 #     'training.bscic.gov.bd']
-ALLOWED_HOSTS = ["localhost:8000",
-    "localhost:8000",
-    "127.0.0.1:8000",
-    "127.0.0.1:8000",
-    ]
+# ALLOWED_HOSTS = ["localhost:8000",
+#     "localhost:8000",
+#     "127.0.0.1:8000",
+#     "127.0.0.1:8000",
+#     ]
+
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+]
 
 # Application definition
 
