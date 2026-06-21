@@ -16,3 +16,4 @@ typing_extensions==4.14.1
 tzdata==2025.2
 prometheus-client==0.21.0 
 prometheus-flask-exporter==0.23.2
+django-prometheus==2.3.1
