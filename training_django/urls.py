@@ -31,13 +31,17 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('login/', include('accounts.urls')),  # Login and logout
-    # Root URL redirects to login or dashboard
-    path('', lambda request: redirect('accounts:login') if not request.user.is_authenticated else redirect('dashboard:index')),
-    path('metrics/', include('django_prometheus.urls')),
+    path('login/', include('accounts.urls')),
+
+    path('', include('django_prometheus.urls')),
+
+    path('', lambda request: redirect(
+        'accounts:login'
+    ) if not request.user.is_authenticated
+      else redirect('dashboard:index')),
+
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('search/', include('search.urls', namespace='search')),
     path('employee-list/', include('employee_list.urls', namespace='employee_list')),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
