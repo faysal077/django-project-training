@@ -46,8 +46,11 @@ SECRET_KEY = 'django-insecure-^2d^_mkrd($*2e4moau^b2o545#(giu5==n-9c!ux(lth%raq&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
-    'training.bscic.gov.bd']
+ALLOWED_HOSTS = ["https://localhost:8000",
+    "http://localhost:8000",
+    "https://127.0.0.1:8000",
+    "http://127.0.0.1:8000",
+    ]
 
 
 # Application definition
