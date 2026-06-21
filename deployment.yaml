@@ -1,0 +1,50 @@
+#######DEPLOYMENT.YAML#########
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+  namespace: default          # <-- added
+  labels:
+    app: hello-world
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: flask
+        image: workhome/training-django-project:2026-06-18-150112
+
+        ports:
+        - containerPort: 8000
+
+
+
+
+---
+
+
+
+##########SERVICE.YAML#########
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+  namespace: default          # <-- added
+  labels:
+    app: hello-world
+    release: prometheus
+spec:
+  selector:
+    app: hello-world
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
