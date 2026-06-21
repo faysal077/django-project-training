@@ -54,13 +54,13 @@ DEBUG = True
 #     "127.0.0.1:8000",
 #     ]
 
-ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "hello-world-service",
-    "hello-world-service.default.svc.cluster.local",
-]
-
+# ALLOWED_HOSTS = [
+#     "localhost",
+#     "127.0.0.1",
+#     "hello-world-service",
+#     "hello-world-service.default.svc.cluster.local",
+# ]
+ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://localhost:8000",
