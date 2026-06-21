@@ -32,10 +32,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('login/', include('accounts.urls')),  # Login and logout
-    path('', include('django_prometheus.urls')),
     # Root URL redirects to login or dashboard
     path('', lambda request: redirect('accounts:login') if not request.user.is_authenticated else redirect('dashboard:index')),
-
+    path('metrics/', include('django_prometheus.urls')),
     path('dashboard/', include('dashboard.urls', namespace='dashboard')),
     path('search/', include('search.urls', namespace='search')),
     path('employee-list/', include('employee_list.urls', namespace='employee_list')),
