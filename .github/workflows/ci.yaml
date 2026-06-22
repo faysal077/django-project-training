@@ -3,6 +3,8 @@ name: Build & Deploy Image
 on:
   push:
     branches: [devops-project] 
+    paths-ignore:
+      - 'deployment.yaml'
 
 jobs:
   build-and-update:
@@ -36,3 +38,12 @@ jobs:
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/training-django-project:${{ steps.tag.outputs.value }} .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/training-django-project:${{ steps.tag.outputs.value }}
+      
+      - name: Update deployment.yaml and commit
+        run: |
+          sed -i "s|image: .*|image: ${{ secrets.DOCKERHUB_USERNAME }}/hello-world:${{ steps.tag.outputs.value }}|" deployment.yaml
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add deployment.yaml
+          git commit -m "Deploy new image ${{ steps.tag.outputs.value }}"
+          git push origin -u devops-project 
