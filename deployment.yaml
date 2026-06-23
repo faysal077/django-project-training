@@ -22,9 +22,21 @@ spec:
 
         ports:
         - containerPort: 8000
+        env:
+        - name: DB_HOST
+          value: mysql
 
+        - name: DB_PORT
+          value: "3306"
 
+        - name: DB_NAME
+          value: djnagoconnect
 
+        - name: DB_USER
+          value: root
+
+        - name: DB_PASSWORD
+          value: 'Bscic@Trgq1w2e3r4t5'
 
 ---
 
