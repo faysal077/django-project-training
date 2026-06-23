@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: flask
-        image: workhome/training-django-project:2026-06-23-035221
+        image: workhome/training-django-project:2026-06-23-040431
 
         ports:
         - containerPort: 8000
