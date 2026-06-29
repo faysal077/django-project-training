@@ -29,22 +29,12 @@ def add_training(request):
     if request.method == "POST":
         form = TrainingForm(request.POST)
         if form.is_valid():
-            form.save()
+            training = form.save(commit=False)
+            training.created_by = request.user
+            training.save()
 
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                # trainings = Training.objects.order_by('-created_at')
-                trainings = Training.objects.filter(
-                    created_by=request.user
-                ).order_by('-created_at')
-                html = render_to_string(
-                    "dashboard/_training_list.html",
-                    {"trainings": trainings},
-                    request=request   # ✅ important
-                )
-                return JsonResponse({"success": True, "html": html})
-            else:
-                messages.success(request, "Training added successfully.")
-                return redirect("dashboard:add_training")
+            messages.success(request, "Training added successfully")
+            return redirect('dashboard:add_training')
 
         else:
             if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -55,28 +45,28 @@ def add_training(request):
     else:
         form = TrainingForm()
 
-    # ✅ FILTERING LOGIC (THIS WAS MISSING)
-    # trainings = Training.objects.order_by('-created_at')
-    trainings = Training.objects.filter(
-        created_by=request.user
-    ).order_by('-created_at')
+        # ✅ FILTERING LOGIC (THIS WAS MISSING)
+        # trainings = Training.objects.order_by('-created_at')
+        trainings = Training.objects.filter(
+            created_by=request.user
+        ).order_by('-created_at')
 
-    title = request.GET.get("title")
-    training_type = request.GET.get("training_type")
+        title = request.GET.get("title")
+        training_type = request.GET.get("training_type")
 
-    if title:
-        trainings = trainings.filter(title__icontains=title)
+        if title:
+            trainings = trainings.filter(title__icontains=title)
 
-    if training_type:
-        trainings = trainings.filter(training_type=training_type)
+        if training_type:
+            trainings = trainings.filter(training_type=training_type)
 
-    return render(
-        request,
-        "dashboard/add_training.html",
-        {
-            "form": form,
-            "trainings": trainings
-        }
+        return render(
+            request,
+            "dashboard/add_training.html",
+            {
+                "form": form,
+                "trainings": trainings
+            }
     )
 
 

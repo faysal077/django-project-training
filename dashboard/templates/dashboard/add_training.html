@@ -14,7 +14,7 @@
     /* Professional CSS Counter for Auto-Incremental Serial Numbers across pages */
     .serial-table {
         /* trainings.start_index is provided by Django Pagination (default to 1 if not paginated) */
-        counter-reset: serial {{ trainings.start_index|default:1|add:"-1" }};
+        counter-reset: serial var(--serial-start);
     }
     .serial-table tbody tr {
         counter-increment: serial;
@@ -43,7 +43,8 @@
         border-radius: 10px;
     }
 </style>
-
+<table class="serial-table"
+       style="--serial-start: {{ trainings.start_index|default:'1'|add:'-1' }};">
 <div class="container mx-auto py-8 px-4">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
@@ -54,7 +55,50 @@
             <i class="fa-solid fa-plus mr-2 text-xs"></i>Add New Training
         </button>
     </div>
+    <!-- FILTER SECTION -->
+<form method="get" id="filterForm" class="mb-6 flex flex-wrap gap-4 items-center">
 
+        <input type="text"
+            name="title"
+            value="{{ request.GET.title }}"
+            placeholder="Search Training Title..."
+            class="border px-4 py-2 rounded w-64">
+
+        <button type="submit"
+                class="bg-green-600 text-white px-5 py-2 rounded hover:bg-green-700">
+            Search
+        </button>
+
+        <select name="training_type"
+                class="border px-4 py-2 rounded"
+                onchange="document.getElementById('filterForm').submit();">
+
+            <option value="">All</option>
+
+            <option value="ইন-হাউজ/অভ্যন্তরীণ"
+                {% if request.GET.training_type == "ইন-হাউজ/অভ্যন্তরীণ" %}
+                    selected
+                {% endif %}>
+                ইন-হাউজ/অভ্যন্তরীণ
+            </option>
+
+            <option value="স্থানীয়"
+                {% if request.GET.training_type == "স্থানীয়" %}
+                    selected
+                {% endif %}>
+                স্থানীয়
+            </option>
+
+            <option value="বৈদেশিক"
+                {% if request.GET.training_type == "বৈদেশিক" %}
+                    selected
+                {% endif %}>
+                বৈদেশিক
+            </option>
+
+        </select>
+
+    </form>
     <!-- Tabular Format -->
     <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
         <div class="overflow-x-auto custom-scrollbar">

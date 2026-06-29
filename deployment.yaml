@@ -1,0 +1,77 @@
+#######DEPLOYMENT.YAML#########
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world
+  namespace: default          # <-- added
+  labels:
+    app: hello-world
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hello-world
+  template:
+    metadata:
+      labels:
+        app: hello-world
+    spec:
+      containers:
+      - name: flask
+        image: workhome/training-django-project:2026-06-23-041703
+
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: DB_HOST
+
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: DB_PORT
+
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: DB_NAME
+
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: DB_USER
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: django-secret
+              key: DB_PASSWORD
+
+---
+
+
+
+##########SERVICE.YAML#########
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-service
+  namespace: default          # <-- added
+  labels:
+    app: hello-world
+    release: prometheus
+spec:
+  selector:
+    app: hello-world
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8000
+  type: ClusterIP
