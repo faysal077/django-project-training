@@ -6,6 +6,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Training(models.Model):
+    id = models.BigAutoField(primary_key=True)
+
     TRAINING_TYPE_CHOICES = [
         ('ইন-হাউজ/অভ্যন্তরীণ', 'ইন-হাউজ/অভ্যন্তরীণ'),
         ('স্থানীয়', 'স্থানীয়'),
@@ -16,7 +18,7 @@ class Training(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name='trainings',
-        null=True,       # important for existing data
+        null=True,
         blank=True
     )
 
