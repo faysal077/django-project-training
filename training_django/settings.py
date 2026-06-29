@@ -44,15 +44,34 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^2d^_mkrd($*2e4moau^b2o545#(giu5==n-9c!ux(lth%raq&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
     'training.bscic.gov.bd']
+# ALLOWED_HOSTS = ["localhost:8000",
+#     "localhost:8000",
+#     "127.0.0.1:8000",
+#     "127.0.0.1:8000",
+#     ]
 
+# ALLOWED_HOSTS = [
+#     "localhost",
+#     "127.0.0.1",
+#     "hello-world-service",
+#     "hello-world-service.default.svc.cluster.local",
+# ]
+# ALLOWED_HOSTS = ["*"]
+# CSRF_TRUSTED_ORIGINS = [
+#     "http://localhost:8000",
+#     "https://localhost:8000",
+#     "http://127.0.0.1:8000",
+#     "https://127.0.0.1:8000",
+# ]
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_prometheus',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -68,6 +87,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -75,6 +95,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'training_django.urls'
@@ -148,6 +169,8 @@ USE_I18N = True
 
 USE_TZ = True
 
+DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
+FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
