@@ -46,8 +46,8 @@ SECRET_KEY = 'django-insecure-^2d^_mkrd($*2e4moau^b2o545#(giu5==n-9c!ux(lth%raq&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
-#     'training.bscic.gov.bd']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost',
+    'training.bscic.gov.bd']
 # ALLOWED_HOSTS = ["localhost:8000",
 #     "localhost:8000",
 #     "127.0.0.1:8000",
@@ -60,7 +60,7 @@ DEBUG = True
 #     "hello-world-service",
 #     "hello-world-service.default.svc.cluster.local",
 # ]
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8000",
     "https://localhost:8000",
