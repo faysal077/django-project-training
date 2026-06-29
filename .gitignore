@@ -11,7 +11,16 @@ __pycache__/
 *.pyo
 *.pyd
 
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
 
+# Python
+__pycache__/
+*.pyc
+venv/
 
 # =====================================
 # Python Cache
