@@ -33,6 +33,31 @@ def add_training(request):
             training.created_by = request.user
             training.save()
 
+            # AJAX request
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+
+                trainings = Training.objects.filter(
+                    created_by=request.user
+                ).order_by('-created_at')
+
+                try:
+                    html = render_to_string(
+                        "dashboard/_training_list.html",
+                        {"trainings": trainings},
+                        request=request
+                    )
+
+                    return JsonResponse({
+                        "success": True,
+                        "html": html
+                    })
+
+                except Exception as e:
+                    return JsonResponse({
+                        "success": False,
+                        "error": str(e)
+                    }, status=500)
+
             messages.success(request, "Training added successfully")
             return redirect('dashboard:add_training')
 
