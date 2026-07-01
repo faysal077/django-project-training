@@ -15,30 +15,123 @@
             <div class="modal-content">
                 <form method="post">
                     {% csrf_token %}
+
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBatchModalLabel">Add Batch for {{ training.title }}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title" id="addBatchModalLabel">
+                            Add Batch for {{ training.title }}
+                        </h5>
+
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
                     </div>
+
                     <div class="modal-body">
+
                         {{ form.non_field_errors }}
-                        <div class="mb-3">
-                            <label class="form-label">Training Title</label>
-                            <input type="text" class="form-control" value="{{ training.title }}" readonly>
-                        </div>
-                        {% for field in form %}
-                            <div class="mb-3">
-                                {{ field.label_tag }}
-                                {{ field }}
-                                {% if field.errors %}
-                                    <div class="text-danger small">{{ field.errors }}</div>
+
+                        <!-- Row 1 -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Training Title</label>
+                                <input type="text"
+                                    class="form-control"
+                                    value="{{ training.title }}"
+                                    readonly>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.organizer.label_tag }}
+                                {{ form.organizer }}
+
+                                {% if form.organizer.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.organizer.errors }}
+                                    </div>
                                 {% endif %}
                             </div>
-                        {% endfor %}
+                        </div>
+
+                        <!-- Row 2 -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.start_date.label_tag }}
+                                {{ form.start_date }}
+
+                                {% if form.start_date.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.start_date.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.end_date.label_tag }}
+                                {{ form.end_date }}
+
+                                {% if form.end_date.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.end_date.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Row 3 -->
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                {{ form.start_time.label_tag }}
+                                {{ form.start_time }}
+
+                                {% if form.start_time.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.start_time.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                {{ form.end_time.label_tag }}
+                                {{ form.end_time }}
+
+                                {% if form.end_time.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.end_time.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Row 4 -->
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                {{ form.total_training_hours.label_tag }}
+                                {{ form.total_training_hours }}
+
+                                {% if form.total_training_hours.errors %}
+                                    <div class="text-danger small">
+                                        {{ form.total_training_hours.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
                     </div>
+
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save Batch</button>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">
+                            Save Batch
+                        </button>
+
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-bs-dismiss="modal">
+                            Close
+                        </button>
                     </div>
+
                 </form>
             </div>
         </div>

@@ -6,7 +6,7 @@ from dashboard.models import Attachment
 class TrainingForm(forms.ModelForm):
     class Meta:
         model = Training
-        fields = ['title', 'organizer', 'training_type']
+        fields = ['title', 'training_type']
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'organizer': forms.TextInput(attrs={'class': 'form-control'}),
@@ -21,6 +21,7 @@ class BatchForm(forms.ModelForm):
         #     'total_training_hours', 'fiscal_year'  # ✅ no batch_number here
         # ]
         fields = [
+            'organizer',
             'start_date',
             'end_date',
             'start_time',
@@ -28,6 +29,10 @@ class BatchForm(forms.ModelForm):
             'total_training_hours'
         ]
         widgets = {
+            'organizer': forms.TextInput(attrs={
+                'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
+                'placeholder': 'Enter Organizer Name'
+            }),
             'start_date': forms.DateInput(attrs={
                 'class': 'w-full rounded-xl border border-slate-300 px-4 py-2.5 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500',
                 'type': 'date',

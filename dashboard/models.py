@@ -7,13 +7,11 @@ from django.contrib.auth.models import User
 
 class Training(models.Model):
     id = models.BigAutoField(primary_key=True)
-
     TRAINING_TYPE_CHOICES = [
         ('ইন-হাউজ/অভ্যন্তরীণ', 'ইন-হাউজ/অভ্যন্তরীণ'),
         ('স্থানীয়', 'স্থানীয়'),
         ('বৈদেশিক', 'বৈদেশিক'),
     ]
-
     created_by = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -23,7 +21,6 @@ class Training(models.Model):
     )
 
     title = models.CharField(max_length=255)
-    organizer = models.CharField(max_length=255, default='Unknown')
     training_type = models.CharField(
         max_length=50,
         choices=TRAINING_TYPE_CHOICES,
@@ -56,6 +53,7 @@ class Training(models.Model):
 
 class Batch(models.Model):
     training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='batches')
+    organizer = models.CharField(max_length=255, default='Unknown')
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     fiscal_year = models.CharField(max_length=10, default="N/A")  # <- default added
