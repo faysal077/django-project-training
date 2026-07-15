@@ -79,28 +79,28 @@ def add_participant(request, training_id, batch_id, batch_number):
     if request.method == 'POST':
         form = ParticipantForm(request.POST)
         if form.is_valid():
-            official_id = form.cleaned_data.get("Official_ID")
+            # official_id = form.cleaned_data.get("Official_ID")
 
-            # Check for overlapping date conflicts
-            conflicts = Participant.objects.filter(
-                Official_ID=official_id
-            ).filter(
-                Q(batch__start_date__lte=batch.end_date) & Q(batch__end_date__gte=batch.start_date)
-            )
+            # # Check for overlapping date conflicts
+            # conflicts = Participant.objects.filter(
+            #     Official_ID=official_id
+            # ).filter(
+            #     Q(batch__start_date__lte=batch.end_date) & Q(batch__end_date__gte=batch.start_date)
+            # )
 
-            if conflicts.exists():
-                conflict = conflicts.first()
-                messages.error(
-                    request,
-                    f"This person is already attached with '{conflict.training.title}' training "
-                    f"from {conflict.batch.start_date} to {conflict.batch.end_date}."
-                )
-                return render(request, 'dashboard/add_participant.html', {
-                    'form': form,
-                    'training': training,
-                    'batch': batch,
-                    'batch_number': batch_number
-                })
+            # if conflicts.exists():
+            #     conflict = conflicts.first()
+            #     messages.error(
+            #         request,
+            #         f"This person is already attached with '{conflict.training.title}' training "
+            #         f"from {conflict.batch.start_date} to {conflict.batch.end_date}."
+            #     )
+            #     return render(request, 'dashboard/add_participant.html', {
+            #         'form': form,
+            #         'training': training,
+            #         'batch': batch,
+            #         'batch_number': batch_number
+            #     })
 
             # If no conflict, save participant
             participant = form.save(commit=False)

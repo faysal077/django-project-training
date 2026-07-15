@@ -6,6 +6,3 @@ admin.site.register(Batch)
 admin.site.register(Participant)
 admin.site.register(FinancialClearance)
 admin.site.register(Attachment)
-
-
-
