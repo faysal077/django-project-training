@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block title %}Edit Employee{% endblock %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow rounded-4">
+
+                <div class="card-header bg-success text-white rounded-top-4">
+                    <h5 class="mb-0">
+                        <i class="bi bi-person-badge-fill"></i>
+                        Employee Details
+                    </h5>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form method="post">
+
+                        {% csrf_token %}
+
+                        <!-- Official ID -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-person-vcard"></i>
+                                Official ID
+                            </label>
+
+                            <input
+                                type="text"
+                                class="form-control bg-light"
+                                value="{{ participant.Official_ID }}"
+                                readonly>
+                        </div>
+
+                        <!-- Name -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-person-fill"></i>
+                                Employee Name
+                            </label>
+
+                            <input
+                                type="text"
+                                name="name"
+                                value="{{ participant.name }}"
+                                class="form-control"
+                                required>
+                        </div>
+
+                        <!-- Designation -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-briefcase-fill"></i>
+                                Designation
+                            </label>
+
+                            <input
+                                type="text"
+                                name="designation"
+                                value="{{ participant.designation }}"
+                                class="form-control"
+                                required>
+                        </div>
+
+                        <!-- Office Address -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-building"></i>
+                                Office Address
+                            </label>
+
+                            <textarea
+                                name="office_address"
+                                rows="4"
+                                class="form-control"
+                                required>{{ participant.office_address }}</textarea>
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end gap-2">
+
+                            <a href="{% url 'employee_list:home' %}"
+                               class="btn btn-outline-secondary rounded-pill px-4">
+
+                                <i class="bi bi-arrow-left"></i>
+
+                                Cancel
+
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-success rounded-pill px-4">
+
+                                <i class="bi bi-check-circle"></i>
+
+                                Save Changes
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

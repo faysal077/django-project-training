@@ -1,74 +1,269 @@
 {% extends "base.html" %}
-{% block title %}Employee List{% endblock %}
+{% block title %}Employee Management{% endblock %}
 
 {% block content %}
 
-<div class="max-w-4xl mx-auto mt-10">
-    <h2 class="text-xl font-bold mb-6">.</h2>
-    <h2 class="text-xl font-bold mb-6">Employee Search</h2>
+<style>
+.table th,
+.table td{
+    padding: .55rem .7rem;
+    font-size: 0.88rem;
+}
 
-    <!-- Search Form -->
-    <form method="get" class="bg-white p-6 rounded-lg shadow mb-6">
+.card-header{
+    font-size:0.95rem;
+}
 
-        <!-- Radio Buttons -->
-        <div class="flex space-x-6 mb-4">
-            <label class="flex items-center space-x-2">
-                <input type="radio" name="search_type" value="name"
-                       {% if search_type == "name" %}checked{% endif %} required>
-                <span>Search by Name</span>
-            </label>
+.form-check-label{
+    font-size:.92rem;
+}
 
-            <label class="flex items-center space-x-2">
-                <input type="radio" name="search_type" value="id"
-                       {% if search_type == "id" %}checked{% endif %}>
-                <span>Search by ID</span>
-            </label>
+.btn{
+    font-size:.90rem;
+}
+
+.form-control{
+    font-size:.92rem;
+}
+</style>
+
+
+<div class="container-fluid py-4">
+    <!-- Search Card -->
+    <div class="card shadow border-0 rounded-4 mb-4">
+
+        <div class="card-header bg-success text-white rounded-top-4">
+
+            <h6 class="mb-0 fw-semibold">
+                <i class="bi bi-search"></i>
+                Search Employee
+            </h6>
+
         </div>
 
-        <!-- Search Bar -->
-        <div class="flex space-x-3">
-            <input type="text" name="query"
-                   value="{{ query|default:'' }}"
-                   placeholder="Enter Name or ID..."
-                   class="flex-1 border rounded px-4 py-2"
-                   required>
+        <div class="card-body">
 
-            <button type="submit"
-                    class="bg-indigo-600 text-black px-5 py-2 rounded hover:bg-indigo-700">
-                Search
-            </button>
+            <form method="get">
+
+                <div class="row mb-4">
+
+                    <div class="col-md-6">
+
+                        <div class="form-check form-check-inline">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="search_type"
+                                value="name"
+                                {% if search_type == "name" %}checked{% endif %}
+                            >
+
+                            <label class="form-check-label">
+                                Search by Name
+                            </label>
+
+                        </div>
+
+                        <div class="form-check form-check-inline">
+
+                            <input
+                                class="form-check-input"
+                                type="radio"
+                                name="search_type"
+                                value="id"
+                                {% if search_type == "id" %}checked{% endif %}
+                            >
+
+                            <label class="form-check-label">
+                                Search by Official ID
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-md-10">
+
+                        <input
+                            type="text"
+                            name="query"
+                            class="form-control"
+                            placeholder="Enter Employee Name or Official ID..."
+                            value="{{ query|default:'' }}"
+                            required
+                        >
+
+                    </div>
+
+                    <div class="col-md-2 d-grid">
+
+                        <button class="btn btn-success">
+
+                            <i class="bi bi-search"></i>
+
+                            Search
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </form>
+
         </div>
 
-    </form>
-
-
-    <!-- Results Table -->
-    {% if results %}
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <table class="min-w-full text-sm">
-            <thead class="bg-gray-100 text-left">
-                <tr>
-                    <th class="px-4 py-3">Ser</th>
-                    <th class="px-4 py-3">Name</th>
-                    <th class="px-4 py-3">Official ID</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for item in results %}
-                <tr class="border-t">
-                    <td class="px-4 py-3">{{ forloop.counter }}</td>
-                    <td class="px-4 py-3">{{ item.name }}</td>
-                    <td class="px-4 py-3">{{ item.Official_ID }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
     </div>
+
+    {% if results %}
+
+    <!-- Result Summary -->
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h6 class="fw-bold mb-0">
+
+            Search Results
+
+            <span class="badge bg-success">
+
+                {{ results|length }}
+
+            </span>
+
+        </h6>
+
+    </div>
+
+    <!-- Table -->
+
+    <div class="card shadow border-0 rounded-4">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-sm align-middle mb-0 small">
+
+                <thead class="table-success">
+
+                    <tr>
+
+                        <th width="60">#</th>
+
+                        <th>Name</th>
+
+                        <th>Official ID</th>
+
+                        <th>Designation</th>
+
+                        <th>Office Address</th>
+
+                        <th>Training</th>
+
+                        <th>Batch</th>
+
+                        <th width="120" class="text-center">Action</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                {% for item in results %}
+
+                    <tr>
+
+                        <td>{{ forloop.counter }}</td>
+
+                        <td>
+
+                            <strong class="fw-semibold small">
+
+                                <i class="bi bi-person-fill text-success"></i>
+
+                                {{ item.name }}
+
+                            </strong>
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-secondary">
+
+                                {{ item.Official_ID }}
+
+                            </span>
+
+                        </td>
+
+                        <td>{{ item.designation }}</td>
+
+                        <td>{{ item.office_address }}</td>
+
+                        <td>
+
+                            <span class="badge bg-info">
+
+                                {{ item.training__title }}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+
+                            <span class="badge bg-warning text-dark">
+
+                                {{ item.batch__batch_number }}
+
+                            </span>
+
+                        </td>
+
+                        <td class="text-center">
+
+                            <a
+                                href="{% url 'employee_list:employee_edit' item.id %}"
+                                class="btn btn-success btn-sm rounded-pill">
+
+                                <i class="bi bi-pencil-square"></i>
+
+                                Edit
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
     {% elif search_type %}
-        <p class="text-red-500 mt-4">No results found.</p>
+
+        <div class="alert alert-warning">
+
+            <i class="bi bi-exclamation-circle"></i>
+
+            No employee found.
+
+        </div>
+
     {% endif %}
 
 </div>
 
 {% endblock %}
-
