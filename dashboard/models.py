@@ -31,25 +31,6 @@ class Training(models.Model):
     def __str__(self):
         return self.title
 
-# class Training(models.Model):
-#     TRAINING_TYPE_CHOICES = [
-#         ('ইন-হাউজ/অভ্যন্তরীণ', 'ইন-হাউজ/অভ্যন্তরীণ'),
-#         ('স্থানীয়', 'স্থানীয়'),
-#         ('বৈদেশিক', 'বৈদেশিক'),
-#     ]
-
-#     title = models.CharField(max_length=255)
-#     organizer = models.CharField(max_length=255, default='Unknown')
-#     training_type = models.CharField(
-#         max_length=50,
-#         choices=TRAINING_TYPE_CHOICES,
-#         default='ইন-হাউজ/অভ্যন্তরীণ'
-#     )
-#     created_at = models.DateTimeField(auto_now_add=True)
-
-#     def __str__(self):
-#         return self.title
-
 
 class Batch(models.Model):
     training = models.ForeignKey(Training, on_delete=models.CASCADE, related_name='batches')

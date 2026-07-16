@@ -67,7 +67,20 @@
                                 class="form-control"
                                 required>
                         </div>
+                        <!-- Contact Number -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-briefcase-fill"></i>
+                                Contact Number
+                            </label>
 
+                            <input
+                                type="text"
+                                name="contact"
+                                value="{{ participant.contact }}"
+                                class="form-control"
+                                required>
+                        </div>
                         <!-- Office Address -->
                         <div class="mb-4">
                             <label class="form-label fw-semibold">
@@ -75,13 +88,15 @@
                                 Office Address
                             </label>
 
-                            <textarea
+                            <input
+                                type="text"
                                 name="office_address"
-                                rows="4"
+                                value="{{ participant.office_address }}"
                                 class="form-control"
-                                required>{{ participant.office_address }}</textarea>
+                                required>
                         </div>
-
+                        
+                        
                         <!-- Buttons -->
                         <div class="d-flex justify-content-end gap-2">
 

@@ -21,6 +21,7 @@ def employee_search(request):
                 "Official_ID",
                 "designation",
                 "office_address",
+                "contact",
                 "training__title",
                 "batch__batch_number",
             )
@@ -34,6 +35,7 @@ def employee_search(request):
                 "Official_ID",
                 "designation",
                 "office_address",
+                "contact",
                 "training__title",
                 "batch__batch_number",
             )
@@ -58,7 +60,7 @@ def employee_edit(request, pk):
         participant.name = request.POST["name"]
         participant.designation = request.POST["designation"]
         participant.office_address = request.POST["office_address"]
-
+        participant.contact = request.POST["contact"]
         participant.save()
 
         return redirect("employee_list:home")
